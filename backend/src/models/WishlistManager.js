@@ -40,6 +40,16 @@ class WishlistManager extends AbstractManager {
     // Return the first row of the result, which represents the item
     return rows[0];
   }
+
+  // The D of CRUD - Delete operation
+
+  async delete(id) {
+    const [result] = await this.database.query(
+      `delete from ${this.table} where id = ?`,
+      [id]
+    );
+    return result;
+  }
 }
 
 module.exports = WishlistManager;

@@ -37,6 +37,25 @@ class ItemManager extends AbstractManager {
     // Return the array of items
     return result;
   }
+  // The U of CRUD - Update operation
+
+  async update(name, website, url, image, price, id) {
+    const [result] = await this.database.query(
+      `update ${this.table} SET name = ?, website = ?, url = ?, image  = ?, price =  ? where id = ? `,
+      [name, website, url, image, price, id]
+    );
+    return result;
+  }
+
+  // The D of CRUD - Delete operation
+
+  async delete(id) {
+    const [result] = await this.database.query(
+      `delete from ${this.table} where id = ?`,
+      [id]
+    );
+    return result;
+  }
 }
 
 module.exports = ItemManager;

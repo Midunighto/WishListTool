@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // Import access to database tables
 const tables = require("../tables");
 
@@ -49,8 +50,26 @@ const add = async (req, res, next) => {
   }
 };
 
+// The D of BREAD - Destroy (Delete) operation
+// This operation is not yet implemented
+const destroy = async (req, res, next) => {
+  try {
+    const { wishlist_id } = req.body;
+
+    const result = await tables.item.delete(wishlist_id);
+    if (result.affectedRows === 0) {
+      res.status(404).send("id introuvable");
+    } else {
+      res.status(200).send(`Wishlist ${wishlist_id} supprimé`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   browse,
   read,
   add,
+  destroy,
 };

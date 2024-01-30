@@ -54,6 +54,21 @@ class UserManager extends AbstractManager {
   // async delete(id) {
   //   ...
   // }
+  async checkEmail(email) {
+    const [rows] = await this.database.query(
+      `select * from ${this.table} where email=?`,
+      [email]
+    );
+    return rows;
+  }
+
+  async checkPseudo(pseudo) {
+    const [rows] = await this.database.query(
+      `select * from ${this.table} where pseudo=?`,
+      [pseudo]
+    );
+    return rows;
+  }
 }
 
 module.exports = UserManager;

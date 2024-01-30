@@ -33,6 +33,8 @@ const read = async (req, res, next) => {
   }
 };
 
+// The E of BREAD - Edit (Update) operation
+
 // The A of BREAD - Add (Create) operation
 const add = async (req, res, next) => {
   // Extract the item data from the request body
@@ -50,8 +52,24 @@ const add = async (req, res, next) => {
   }
 };
 
+// The D of BREAD - Destroy (Delete) operation
+const destroy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await tables.wishlist.delete(id);
+    if (result.affectedRows === 0) {
+      res.status(404).send("id introuvable");
+    } else {
+      res.status(200).send(`Wishlist ${id} supprimée`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = {
   browse,
   read,
   add,
+  destroy,
 };

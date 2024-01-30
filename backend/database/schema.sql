@@ -34,3 +34,20 @@ CREATE TABLE wishlistItem (
 ALTER TABLE `wishlist`
   ADD KEY `fk_wishlist_user` (`user_id`),
   ADD CONSTRAINT `fk_wishlist_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+  -- Supprimer la contrainte existante
+ALTER TABLE wishlistItem
+DROP FOREIGN KEY `wishlistitem_ibfk_2`;
+
+-- Recréer la contrainte avec l'action CASCADE
+ALTER TABLE wishlistItem
+ADD CONSTRAINT `wishlistitem_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON DELETE CASCADE;
+
+-- Supprimer la contrainte existante
+ALTER TABLE wishlistItem
+DROP FOREIGN KEY `wishlistitem_ibfk_1`;
+
+-- Recréer la contrainte avec l'action CASCADE
+ALTER TABLE wishlistItem
+ADD CONSTRAINT `wishlistitem_ibfk_1` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist`(`id`) ON DELETE CASCADE;
+ALTER TABLE user MODIFY pwd VARCHAR(255);
