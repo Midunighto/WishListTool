@@ -1,0 +1,19 @@
+@import "../styles/root.scss";
+
+.wrapper {
+  .container {
+    h1 {
+      font-size: 1.3rem;
+    }
+    p {
+      text-align: center;
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+}
