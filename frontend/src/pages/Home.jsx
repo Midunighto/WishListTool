@@ -16,8 +16,8 @@ export default function Home() {
           expérience d'achat en ligne en un jeu d'enfant.
         </p>
         <div className="links">
-          <Link to={"/signup"}>créer un compte</Link>
-          <Link>j'ai déjà un compte</Link>
+          <Link to="/signup">créer un compte</Link>
+          <Link to="/signin">j'ai déjà un compte</Link>
         </div>
       </div>
     </div>

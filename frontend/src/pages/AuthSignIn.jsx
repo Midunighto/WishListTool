@@ -4,8 +4,8 @@ import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import "../styles/auth.scss";
 
-export default function Auth() {
-  const [signedUp, setSignedUp] = useState(false);
+export default function AuthSignIn() {
+  const [signedUp, setSignedUp] = useState(true);
 
   return (
     <div className="wrapper">
