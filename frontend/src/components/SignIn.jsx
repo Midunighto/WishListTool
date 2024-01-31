@@ -2,11 +2,14 @@
 import { React, useState } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { Navigate } from "react-router-dom";
+import { useStoredUser } from "../contexts/UserContext";
 
 export default function SignIn({ setSignedUp }) {
+  const { storedUser, setStoredUser } = useStoredUser();
+
   const [user, setUser] = useState({
     pseudo: "",
-    email: "",
     pwd: "",
   });
 
@@ -17,17 +20,27 @@ export default function SignIn({ setSignedUp }) {
     });
   };
 
-  const handleRealSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users`,
-        user
-        /*    { withCredentials: true } */
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/login`,
+        user,
+        {
+          withCredentials: true,
+        }
       );
+      if (res.status === 200) {
+        setStoredUser(res.data.user);
+        window.localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
     } catch (error) {
       console.error(error);
     }
   };
+  if (storedUser) {
+    return <Navigate to="/my-wishlists" />;
+  }
   return (
     <div className="container">
       <form className="auth">
@@ -55,7 +68,7 @@ export default function SignIn({ setSignedUp }) {
           />
         </div>
 
-        <button type="submit" onClick={handleRealSubmit}>
+        <button type="submit" onClick={handleSubmit}>
           Se connecter
         </button>
       </form>

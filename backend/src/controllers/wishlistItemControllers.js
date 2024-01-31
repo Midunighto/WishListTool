@@ -33,6 +33,26 @@ const read = async (req, res, next) => {
     next(err);
   }
 };
+const readByUser = async (req, res, next) => {
+  try {
+    // Fetch all items from the database based on the provided user_id and wishlist_id
+    const wishlistItems = await tables.wishlistItem.readAll(
+      req.params.user_id,
+      req.params.wishlist_id
+    );
+
+    // If no items are found, respond with HTTP 404 (Not Found)
+    // Otherwise, respond with the items in JSON format
+    if (wishlistItems.length === 0) {
+      res.sendStatus(404);
+    } else {
+      res.json(wishlistItems);
+    }
+  } catch (err) {
+    // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
 // The A of BREAD - Add (Create) operation
 const add = async (req, res, next) => {
   // Extract the item data from the request body
@@ -70,6 +90,7 @@ const destroy = async (req, res, next) => {
 module.exports = {
   browse,
   read,
+  readByUser,
   add,
   destroy,
 };

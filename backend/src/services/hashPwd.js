@@ -23,7 +23,7 @@ const verifyPassword = async (req, res, next) => {
       res.status(401).json({ error: "Identifiant ou mot de passe incorrect" });
     }
 
-    if (await bcrypt.compare(req.body.pwd, user.password)) {
+    if (await bcrypt.compare(req.body.pwd, user.pwd)) {
       delete user.pwd;
       req.user = user;
       next();

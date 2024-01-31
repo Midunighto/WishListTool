@@ -2,10 +2,25 @@
 
 .wrapper {
   .container {
-    h1 {
+    img {
+      margin: 0 auto;
+    }
+    h1,
+    h2 {
       font-size: 1.3rem;
+      text-align: center;
+    }
+    small {
+      text-align: center;
+      margin-top: -25px;
     }
     p {
+      text-align: center;
+      font-size: 0.8rem;
+      letter-spacing: 0;
+    }
+    h2 {
+      font-size: 1.1rem;
       text-align: center;
     }
     .links {

@@ -25,9 +25,11 @@ router.get("/wishlists", wishlistControllers.browse);
 
 // Route to get a specific item by ID
 router.get("/wishlists/:id", wishlistControllers.read);
+// get wishlist by user id
+router.get("/users/:user_id/wishlists", wishlistControllers.readByUser);
 
 // Route to add a new item
-router.post("/wishlists", wishlistControllers.add);
+router.post("/wishlists/", wishlistControllers.add);
 
 router.delete("/wishlists/:id", wishlistControllers.destroy);
 /* ************************************************************************* */
@@ -38,21 +40,17 @@ router.get("/items", itemControllers.browse);
 // Route to get a specific item by ID
 router.get("/items/:id", itemControllers.read);
 
+// Route to get a specific item by wishlist_ID
+router.get(
+  "/users/:user_id/wishlists/:wishlist_id/items/",
+  itemControllers.readByWishlist
+);
+
 // Route to add a new item
 router.post("/items", itemControllers.add);
 router.put("/items/:id", itemControllers.edit);
 router.delete("/items/:id", itemControllers.destroy);
 
 /* ************************************************************************* */
-const wishlistItemControllers = require("./controllers/wishlistItemControllers");
-
-router.get("/wishlistItems", wishlistItemControllers.browse);
-
-// Route to get a specific item by ID
-router.get("/wishlistItems/:id", wishlistItemControllers.read);
-
-// Route to add a new item
-router.post("/wishlistItems", wishlistItemControllers.add);
-router.delete("/wishlistItems/:id", wishlistControllers.destroy);
 
 module.exports = router;

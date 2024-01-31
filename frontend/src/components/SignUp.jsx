@@ -19,11 +19,9 @@ export default function SignUp({ setSignedUp }) {
 
   const handleRealSubmit = async () => {
     try {
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users`,
-        user
-        /*    { withCredentials: true } */
-      );
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users`, user, {
+        withCredentials: true,
+      });
     } catch (error) {
       console.error(error);
     }

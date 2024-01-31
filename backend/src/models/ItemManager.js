@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const AbstractManager = require("./AbstractManager");
 
 class ItemManager extends AbstractManager {
@@ -12,8 +13,15 @@ class ItemManager extends AbstractManager {
   async create(item) {
     // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await this.database.query(
-      `insert into ${this.table} (name, website, url, price) values (?, ?, ?, ?)`,
-      [item.name, item.website, item.url, item.price]
+      `insert into ${this.table} (name, website, url, price, user_id, wishlist_id) values (?, ?, ?, ?, ?, ?)`,
+      [
+        item.name,
+        item.website,
+        item.url,
+        item.price,
+        item.used_id,
+        item.wishlist_id,
+      ]
     );
 
     // Return the ID of the newly inserted item
@@ -37,6 +45,18 @@ class ItemManager extends AbstractManager {
     // Return the array of items
     return result;
   }
+
+  async readByWishlist(user_id, wishlist_id) {
+    // Execute the SQL SELECT query to retrieve all items from the "item" table
+    const [result] = await this.database.query(
+      `SELECT * FROM ${this.table} WHERE user_id = ? AND wishlist_id = ?`,
+      [user_id, wishlist_id]
+    );
+
+    // Return the array of items
+    return result;
+  }
+
   // The U of CRUD - Update operation
 
   async update(name, website, url, image, price, id) {

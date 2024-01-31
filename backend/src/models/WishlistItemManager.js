@@ -29,14 +29,13 @@ class WishlistItemManager extends AbstractManager {
     return result;
   }
 
-  async read(wishlist_id) {
-    // Execute the SQL SELECT query to retrieve a specific item by its ID
+  async readByUser(wishlist_id, user_id) {
     const [result] = await this.database.query(
-      `select * from ${this.table} where wishlist_id = ?`,
-      [wishlist_id]
+      `SELECT wishlistItem.* FROM ${this.table} JOIN wishlist ON ${this.table}.wishlist_id = wishlist.id WHERE ${this.table}.wishlist_id = ? AND wishlist.user_id = ?`,
+      [wishlist_id, user_id]
     );
 
-    // Return the first row of the result, which represents the item
+    // Return the result, which represents the items
     return result;
   }
 

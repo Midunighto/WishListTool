@@ -63,8 +63,8 @@ const add = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const user = req.user;
-    const token = jwt.sign({ user }, process.env.APP_SECRET);
-    res.cookie("token", token, { httpOnly: true });
+    const userToken = jwt.sign({ user }, process.env.APP_SECRET);
+    res.cookie("userToken", userToken, { httpOnly: true });
     res.json({ user });
   } catch (err) {
     next(err);
@@ -72,7 +72,7 @@ const login = async (req, res, next) => {
 };
 const logout = async (req, res, next) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("userToken");
     res.sendStatus(200);
   } catch (err) {
     next(err);

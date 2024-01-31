@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // Import access to database tables
 const tables = require("../tables");
 
@@ -34,6 +35,24 @@ const read = async (req, res, next) => {
   }
 };
 
+const readByWishlist = async (req, res) => {
+  try {
+    // Appeler la méthode readAll de ItemManager avec user_id
+    const items = await tables.item.readByWishlist(
+      req.params.user_id,
+      req.params.wishlist_id
+    );
+    if (items.length === 0) {
+      res.sendStatus(404);
+    } else {
+      res.json(items);
+    }
+  } catch (error) {
+    // Gérer les erreurs
+    console.error(error);
+    res.status(500).send("Erreur lors de la récupération des items");
+  }
+};
 // The E of BREAD - Edit (Update) operation
 // This operation is not yet implemented
 
@@ -93,6 +112,7 @@ const destroy = async (req, res, next) => {
 module.exports = {
   browse,
   read,
+  readByWishlist,
   edit,
   add,
   destroy,
