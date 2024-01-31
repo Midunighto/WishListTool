@@ -19,7 +19,7 @@ class ItemManager extends AbstractManager {
         item.website,
         item.url,
         item.price,
-        item.used_id,
+        item.user_id,
         item.wishlist_id,
       ]
     );
@@ -59,10 +59,10 @@ class ItemManager extends AbstractManager {
 
   // The U of CRUD - Update operation
 
-  async update(name, website, url, image, price, id) {
+  async update(name, website, url, image, price) {
     const [result] = await this.database.query(
       `update ${this.table} SET name = ?, website = ?, url = ?, image  = ?, price =  ? where id = ? `,
-      [name, website, url, image, price, id]
+      [name, website, url, image, price]
     );
     return result;
   }

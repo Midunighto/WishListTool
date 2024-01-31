@@ -51,7 +51,7 @@
     align-items: center;
     backdrop-filter: blur(8px);
     .container-modal {
-      height: 200px;
+      height: fit-content;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -59,7 +59,7 @@
       display: flex;
       flex-direction: column;
       gap: 1.3rem;
-      width: 50%;
+      width: 60%;
       border: 1px solid $button-color-option2;
       border-radius: 25px;
       backdrop-filter: blur(10px);
@@ -67,8 +67,8 @@
       position: relative;
       .close {
         position: relative;
-        right: -40%;
-        top: -10px;
+        right: -45%;
+        top: -5px;
         border: none;
         background-color: transparent;
       }
@@ -83,10 +83,44 @@
           border-radius: 5px;
           border: none;
           margin-bottom: 20px;
+          border: 1px solid rgba(128, 128, 128, 0.2);
         }
         button {
           padding: 0.9rem;
           width: 100px;
+          border-radius: 22px;
+          border: none;
+          box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+          background-color: $button-color-option2;
+          color: white;
+        }
+      }
+      /* ADD ITEM MODAL */
+      .new-item {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        label {
+          width: 60%;
+          text-align: left;
+        }
+        input {
+          height: 2rem;
+          border-radius: 5px;
+          border: none;
+          margin-bottom: 20px;
+          border: 1px solid rgba(128, 128, 128, 0.2);
+          width: 90%;
+        }
+        .input-image {
+          text-align: center;
+          margin-bottom: 10px;
+        }
+        button {
+          padding: 0.9rem;
+          width: 130px;
           border-radius: 22px;
           border: none;
           box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
