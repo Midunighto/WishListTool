@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import { useStoredUser } from "../contexts/UserContext";
 
 import "../styles/wishlists.scss";
