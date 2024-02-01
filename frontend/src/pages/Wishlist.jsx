@@ -53,21 +53,35 @@ export default function Wishlist() {
     wishlist_id: id,
   });
 
-  const handleNewItem = async () => {
+  const handleSubmitNewItem = async () => {
+    const formData = new FormData();
+    for (const key in newItem) {
+      if (Object.prototype.hasOwnProperty.call(newItem, key)) {
+        formData.append(key, newItem[key]);
+      }
+    }
     try {
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/items`,
-        newItem
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
     } catch (error) {
       console.error(error);
     }
   };
+
   const handleChange = (e) => {
-    setNewItem({
-      ...newItem,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "image") {
+      setNewItem({
+        ...newItem,
+        [e.target.name]: e.target.files[0],
+      });
+    } else
+      setNewItem({
+        ...newItem,
+        [e.target.name]: e.target.value,
+      });
   };
 
   return (
@@ -83,7 +97,15 @@ export default function Wishlist() {
           <p className="hidden">ajouter un item</p>
         </button>
         {items.length > 1
-          ? items.map((item) => <MyWishlist item={item} />)
+          ? items.map((item) => (
+              <MyWishlist
+                item={item}
+                setItems={setItems}
+                items={items}
+                handleChange={handleChange}
+                storedUser={storedUser}
+              />
+            ))
           : null}
       </div>
 
@@ -135,11 +157,17 @@ export default function Wishlist() {
               <label htmlFor="input-image" className="input-image">
                 <img src={upload} alt="upload" width={50} />
               </label>
-              <input type="file" name="image" id="input-image" hidden />
+              <input
+                type="file"
+                name="image"
+                id="input-image"
+                hidden
+                onChange={handleChange}
+              />
               <button
                 type="button"
                 onClick={() => {
-                  handleNewItem();
+                  handleSubmitNewItem();
                   setModal(false);
                 }}
               >

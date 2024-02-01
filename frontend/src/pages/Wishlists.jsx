@@ -60,10 +60,13 @@ export default function Wishlists() {
       return;
     }
     try {
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/wishlists`,
         list
       );
+
+      // Ajoutez la nouvelle wishlist à l'état de wishlists
+      setWishlists((prevWishlists) => [...prevWishlists, response.data]);
     } catch (error) {
       console.error(error);
     }
@@ -88,14 +91,16 @@ export default function Wishlists() {
               className="wishlist"
               key={wishlist.id}
             >
-              {items.map((item) => (
-                <div className="images">
-                  <img src={item.image} alt="" width={30} key={item.image} />
-                  <img src={item.image} alt="" width={30} key={item.image} />
-                  <img src={item.image} alt="" width={30} key={item.image} />
-                  <img src={item.image} alt="" width={30} key={item.image} />
-                </div>
-              ))}
+              <div className="images">
+                {items.map((item) => (
+                  <>
+                    <img src={item.image} alt="" width={30} key={item.image} />
+                    <img src={item.image} alt="" width={30} key={item.image} />
+                    <img src={item.image} alt="" width={30} key={item.image} />
+                    <img src={item.image} alt="" width={30} key={item.image} />
+                  </>
+                ))}
+              </div>
               <h2>{wishlist.name}</h2>
             </Link>
           ))}

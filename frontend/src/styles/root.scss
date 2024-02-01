@@ -50,11 +50,15 @@ body {
 a {
   color: $font-color-dark;
   font-size: 0.9rem;
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 button {
   cursor: pointer;
   &:hover {
     transform: scale(1.05);
+    filter: brightness(110%);
   }
 }
 

@@ -1,7 +1,11 @@
 const express = require("express");
+const multer = require("multer");
+
+const uploadFile = require("./services/multer");
 
 const router = express.Router();
 
+/* const upload = multer({ dest: "public/assets/images" }); */
 /* ************************************************************************* */
 const userControllers = require("./controllers/userControllers");
 const signup = require("./services/signup");
@@ -47,8 +51,12 @@ router.get(
 );
 
 // Route to add a new item
-router.post("/items", itemControllers.add);
-router.put("/items/:id", itemControllers.edit);
+router.post("/items", uploadFile.single("image"), itemControllers.add);
+/* router.post("/items/image ", upload.single("image"), itemControllers.editImage); */
+/* router.post("/items/image ", uploadFile.single("image"), itemControllers.editImage); */
+
+router.put("/items/:id", uploadFile.single("image"), itemControllers.edit);
+
 router.delete("/items/:id", itemControllers.destroy);
 
 /* ************************************************************************* */

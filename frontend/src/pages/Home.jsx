@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
+import { useStoredUser } from "../contexts/UserContext";
 
 import "../styles/home.scss";
 
 import logo from "../assets/wantit.png";
 
 export default function Home() {
+  const { storedUser } = useStoredUser();
+
   return (
     <div className="wrapper">
       <div className="container">
-        <h1>WANT-IT !</h1>
+        <h1 className="title">WANT-IT !</h1>
         <small>Créateur de wishlist</small>
         <p>
           Ajoutez facilement des produits provenant de différents sites sur une
@@ -17,10 +20,16 @@ export default function Home() {
         </p>
         <img src={logo} alt="" width={50} />
 
-        <div className="links">
-          <Link to="/signup">créer un compte</Link>
-          <Link to="/signin">j'ai déjà un compte</Link>
-        </div>
+        {storedUser ? (
+          <h2>
+            Bienvenue, <span>{storedUser.pseudo}</span>
+          </h2>
+        ) : (
+          <div className="links">
+            <Link to="/signup">créer un compte</Link>
+            <Link to="/signin">j'ai déjà un compte</Link>
+          </div>
+        )}
       </div>
     </div>
   );

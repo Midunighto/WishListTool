@@ -1,4 +1,7 @@
 /* eslint-disable camelcase */
+const fs = require("fs");
+const jwt = require("jsonwebtoken");
+const path = require("path");
 // Import access to database tables
 const tables = require("../tables");
 
@@ -58,11 +61,16 @@ const readByWishlist = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
+    let imagePath = "";
+    if (req.file) {
+      imagePath = `/assets/uploads/${req.file.filename}`;
+    }
+
     const result = await tables.item.update(
       req.body.name,
       req.body.website,
       req.body.url,
-      req.body.image,
+      imagePath,
       req.body.price,
       req.params.id
     );
@@ -79,13 +87,16 @@ const edit = async (req, res) => {
 const add = async (req, res, next) => {
   // Extract the item data from the request body
   const item = req.body;
+  if (req.file) {
+    item.image = `/assets/uploads/${req.file.filename}`;
+  }
 
   try {
     // Insert the item into the database
     const insertId = await tables.item.create(item);
 
     // Respond with HTTP 201 (Created) and the ID of the newly inserted item
-    res.status(201).json({ insertId });
+    res.status(201).json({ insertId, image: item.image });
   } catch (err) {
     // Pass any errors to the error-handling middleware
     next(err);
@@ -114,6 +125,7 @@ module.exports = {
   read,
   readByWishlist,
   edit,
+  /*   editImage, */
   add,
   destroy,
 };

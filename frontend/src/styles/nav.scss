@@ -32,8 +32,8 @@ nav {
     list-style: none;
     justify-content: space-between;
     align-items: center;
-    li:nth-child(1) {
-      flex-grow: 0.95;
+    #nav-wishlists {
+      flex-grow: 0.85;
       text-align: center;
       a {
         color: $font-color-dark;

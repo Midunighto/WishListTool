@@ -13,18 +13,18 @@ class ItemManager extends AbstractManager {
   async create(item) {
     // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await this.database.query(
-      `insert into ${this.table} (name, website, url, price, user_id, wishlist_id) values (?, ?, ?, ?, ?, ?)`,
+      `insert into ${this.table} (name, website, url, image, price, user_id, wishlist_id) values (?, ?, ?, ?, ?, ?, ?)`,
       [
         item.name,
         item.website,
         item.url,
+        item.image,
         item.price,
         item.user_id,
         item.wishlist_id,
       ]
     );
 
-    // Return the ID of the newly inserted item
     return result.insertId;
   }
 
@@ -59,14 +59,30 @@ class ItemManager extends AbstractManager {
 
   // The U of CRUD - Update operation
 
-  async update(name, website, url, image, price) {
+  async update(name, website, url, image, price, id) {
     const [result] = await this.database.query(
       `update ${this.table} SET name = ?, website = ?, url = ?, image  = ?, price =  ? where id = ? `,
-      [name, website, url, image, price]
+      [name, website, url, image, price, id]
     );
     return result;
   }
 
+  /*  async updateImage(image, id, extension) {
+    // Execute the SQL INSERT query to add a new item to the "item" table
+
+    const [result] = await this.database.query(
+      `update ${this.table} set image=? where id= ?`,
+      [
+        `${image.destination.replace("public", "")}/${
+          image.filename
+        }${extension}`,
+        id,
+      ]
+    );
+
+    // Return the ID of the newly inserted item
+    return result.insertId;
+  } */
   // The D of CRUD - Delete operation
 
   async delete(id) {
