@@ -10,6 +10,10 @@ import AuthSignUp from "./pages/AuthSignUp";
 import AuthSignIn from "./pages/AuthSignIn";
 import Wishlists from "./pages/Wishlists";
 import Wishlist from "./pages/Wishlist";
+import Account from "./pages/Account";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +40,10 @@ const router = createBrowserRouter([
         path: "/wishlists/:id",
         element: <Wishlist />,
       },
+      {
+        path: "/account",
+        element: <Account />,
+      },
     ],
   },
 ]);
@@ -45,5 +53,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <UserProvider>
     <RouterProvider router={router} />
+    <ToastContainer />
   </UserProvider>
 );

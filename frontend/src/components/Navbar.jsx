@@ -28,7 +28,7 @@ export default function Navbar() {
           id="account"
           style={storedUser ? null : { flexGrow: 1, textAlign: "end" }}
         >
-          <Link>
+          <Link to="/account">
             <img src={account} alt="account logo" width={20} />
           </Link>
         </li>

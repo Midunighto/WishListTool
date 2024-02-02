@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useStoredUser } from "../contexts/UserContext";
 
 import "../styles/wishlists.scss";
-import MyWishlist from "../components/MyWishlist";
+import Items from "../components/Items";
 import SignIn from "../components/SignIn";
 
 import add from "../assets/add.svg";
@@ -14,8 +14,9 @@ import upload from "../assets/upload.png";
 
 export default function Wishlist() {
   const { storedUser } = useStoredUser();
-  const [items, setItems] = useState([{}]);
+  const [items, setItems] = useState([]);
   const [wishlists, setWishlists] = useState([{}]);
+  const [reloadData, setReloadData] = useState(false);
   const { id } = useParams();
   const [modal, setModal] = useState(false);
   /* CAL WISHLIST TO GET WISHLIST.NAME */
@@ -29,19 +30,22 @@ export default function Wishlist() {
   }, []);
 
   /* CALL ITEMS */
-  useEffect(() => {
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
-          storedUser.id
-        }/wishlists/${id}/items/`
-      )
 
-      .then((res) => {
-        setItems(res.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+            storedUser.id
+          }/wishlists/${id}/items/`
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadData();
+  }, [reloadData]);
 
   /* ADD ITEM LOGIC */
   const [newItem, setNewItem] = useState({
@@ -68,6 +72,7 @@ export default function Wishlist() {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       setItems([...items, response.data]);
+      setReloadData((prev) => !prev);
     } catch (error) {
       console.error(error);
     }
@@ -95,7 +100,9 @@ export default function Wishlist() {
             <button
               type="button"
               className="add-item"
-              onClick={() => setModal(true)}
+              onClick={() => {
+                setModal(true);
+              }}
             >
               <img src={add} alt="symbole plus" width={50} />
               <p className="hidden">ajouter un item</p>
@@ -103,7 +110,7 @@ export default function Wishlist() {
 
             {items.length > 0 &&
               items.map((item) => (
-                <MyWishlist
+                <Items
                   item={item}
                   setItems={setItems}
                   items={items}

@@ -1,3 +1,4 @@
+-- SQLBook: Code
 CREATE TABLE `user`(
   `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
   `pseudo` varchar(50) NOT NULL, 

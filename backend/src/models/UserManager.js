@@ -32,6 +32,7 @@ class UserManager extends AbstractManager {
     // Return the first row of the result, which represents the item
     return rows[0];
   }
+
   async readByUser(id) {
     // Execute the SQL SELECT query to retrieve a specific item by its ID
     const [rows] = await this.database.query(
@@ -53,7 +54,13 @@ class UserManager extends AbstractManager {
 
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing item
-
+  async updateTheme(theme, id) {
+    const [result] = await this.database.query(
+      `update ${this.table} SET theme = ? where id = ?`,
+      [theme, id]
+    );
+    return result;
+  }
   // async update(item) {
   //   ...
   // }

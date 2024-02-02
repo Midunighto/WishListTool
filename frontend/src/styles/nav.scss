@@ -35,6 +35,9 @@ nav {
     #nav-wishlists {
       flex-grow: 0.85;
       text-align: center;
+      @media screen and (min-width: 700px) {
+        flex-grow: 0.95;
+      }
       a {
         color: $font-color-dark;
         text-decoration: none;

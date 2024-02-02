@@ -4,6 +4,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { useStoredUser } from "../contexts/UserContext";
+import { error } from "../services/toast";
 
 export default function SignIn({ setSignedUp }) {
   const { storedUser, setStoredUser } = useStoredUser();
@@ -34,16 +35,19 @@ export default function SignIn({ setSignedUp }) {
         setStoredUser(res.data.user);
         window.localStorage.setItem("user", JSON.stringify(res.data.user));
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      if (err.response.status === 422) {
+        error("Mot de passe incorrect");
+      }
     }
   };
   if (storedUser) {
-    return <Navigate to="/my-wishlists" />;
+    return <Navigate to="/" />;
   }
   return (
     <div className="container">
-      <form className="auth">
+      <form className="auth" method="POST">
         <div className="group-form">
           <label htmlFor="pseudo" id="pseudo">
             Nom d'utilisateur

@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
+
 import "../styles/auth.scss";
 
 export default function AuthSignIn() {

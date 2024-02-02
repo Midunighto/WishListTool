@@ -20,6 +20,8 @@ router.get("/users/:id", userControllers.read);
 // Route to add a new item
 router.post("/users", signup, hashPassword, userControllers.add);
 
+router.put("/users/:id/addtheme", userControllers.editTheme);
+
 router.post("/login", verifyPassword, userControllers.login);
 router.get("/logout", userControllers.logout);
 /* ************************************************************************* */

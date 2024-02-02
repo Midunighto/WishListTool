@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { React, useState } from "react";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { success, error } from "../services/toast";
 
 export default function SignUp({ setSignedUp }) {
   const [user, setUser] = useState({
@@ -9,26 +11,58 @@ export default function SignUp({ setSignedUp }) {
     email: "",
     pwd: "",
   });
-
+  const [password, setPassword] = useState({
+    confirmPwd: "",
+  });
+  const [created, setCreated] = useState(false);
   const handleChange = (e) => {
     setUser({
       ...user,
       [e.target.name]: e.target.value,
     });
+    setPassword({
+      ...password,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleRealSubmit = async () => {
+  const handleRealSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users`, user, {
-        withCredentials: true,
-      });
-    } catch (error) {
-      console.error(error);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users`,
+        user,
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 201) {
+        success("Compte créée avec succès");
+        setCreated(true);
+      }
+
+      console.info(res.status);
+    } catch (err) {
+      if (err.response.status === 409) {
+        error("L'email ou pseudo existe déjà");
+      }
+      if (err.response.status === 400) {
+        error("Merci de remplir tous les champs");
+      }
     }
   };
+  if (created) {
+    return <Navigate to="/signin" />;
+  }
   return (
     <div className="container">
-      <form className="auth">
+      <form
+        className="auth"
+        onSubmit={handleRealSubmit}
+        method="post"
+        action="/signin"
+      >
         <div className="group-form">
           <label htmlFor="pseudo" id="pseudo">
             Nom d'utilisateur
@@ -74,9 +108,7 @@ export default function SignUp({ setSignedUp }) {
           />
         </div>
 
-        <button type="submit" onClick={handleRealSubmit}>
-          S'inscrire
-        </button>
+        <button type="submit">S'inscrire</button>
       </form>
       <button
         type="button"

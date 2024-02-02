@@ -10,12 +10,14 @@ import defaut from "../assets/default.svg";
 import bin from "../assets/bin.svg";
 
 import "../styles/wishlists.scss";
+import ValidateWishlist from "../components/ValidateWishlist";
 
 export default function Wishlists() {
   const { storedUser } = useStoredUser();
   const [wishlists, setWishlists] = useState([{}]);
   const [items, setItems] = useState([]);
   const [addNewWishlist, setAddNewWishlist] = useState(false);
+  const [validate, setValidate] = useState(false);
   const { id } = useParams();
 
   function getImages(infos) {
@@ -111,50 +113,61 @@ export default function Wishlists() {
               {wishlists.map((wishlist) => {
                 return (
                   <>
-                    <Link
-                      to={`/wishlists/${wishlist.id}`}
-                      type="button"
-                      className="wishlist"
-                      key={wishlist.id}
-                    >
-                      <div className="images">
-                        {items.slice(0, 3).map((item) => {
-                          return (
-                            <div key={item.id} className="img">
-                              {item.map((img, index) => {
-                                if (index < 4) {
-                                  return wishlist.id === img.wishlist_id ? (
-                                    <img
-                                      src={
-                                        img.image
-                                          ? `${
-                                              import.meta.env.VITE_BACKEND_URL
-                                            }/${img.image}`
-                                          : defaut
-                                      }
-                                      alt=""
-                                      width={30}
-                                      key={img.id}
-                                    />
-                                  ) : (
-                                    ""
-                                  );
-                                }
-                                return null;
-                              })}
-                            </div>
-                          );
-                        })}
-                      </div>
-                      <h2>{wishlist.name}</h2>
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(wishlist.id)}
-                    >
-                      <img src={bin} alt="" width={20} />
-                      <p hidden>je suis un bouton</p>
-                    </button>
+                    <div className="list-row">
+                      <Link
+                        to={`/wishlists/${wishlist.id}`}
+                        type="button"
+                        className="wishlist"
+                        key={wishlist.id}
+                      >
+                        <div className="images">
+                          {items.slice(0, 3).map((item) => {
+                            return (
+                              <div key={item.id} className="img">
+                                {item.map((img, index) => {
+                                  if (index < 4) {
+                                    return wishlist.id === img.wishlist_id ? (
+                                      <img
+                                        src={
+                                          img.image
+                                            ? `${
+                                                import.meta.env.VITE_BACKEND_URL
+                                              }/${img.image}`
+                                            : defaut
+                                        }
+                                        alt=""
+                                        key={img.id}
+                                      />
+                                    ) : (
+                                      ""
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <h2 id="name">{wishlist.name}</h2>
+                      </Link>
+                      <button
+                        type="button"
+                        className="delete"
+                        onClick={() =>
+                          /* handleDelete(wishlist.id) */ setValidate(true)
+                        }
+                      >
+                        <img src={bin} alt="" width={20} />
+                        <p hidden>je suis un bouton</p>
+                      </button>
+                    </div>
+                    {validate && (
+                      <ValidateWishlist
+                        handleDelete={handleDelete}
+                        setValidate={setValidate}
+                        wishlist={wishlist}
+                      />
+                    )}
                   </>
                 );
               })}
