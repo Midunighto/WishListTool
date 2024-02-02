@@ -58,22 +58,23 @@ const readByWishlist = async (req, res) => {
 };
 // The E of BREAD - Edit (Update) operation
 // This operation is not yet implemented
-
 const edit = async (req, res) => {
   try {
-    let imagePath = "";
+    let imagePath;
     if (req.file) {
       imagePath = `/assets/uploads/${req.file.filename}`;
     }
 
+    // Passer imagePath seulement s'il est défini
     const result = await tables.item.update(
       req.body.name,
       req.body.website,
       req.body.url,
-      imagePath,
+      imagePath, // Ceci peut être undefined si aucune nouvelle image n'est fournie
       req.body.price,
       req.params.id
     );
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Une erreur est survenue" });
     }

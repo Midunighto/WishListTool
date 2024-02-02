@@ -4,15 +4,35 @@ import axios from "axios";
 
 import { useStoredUser } from "../contexts/UserContext";
 import AddWishList from "../components/AddWishList";
+import SignIn from "../components/SignIn";
+
+import defaut from "../assets/default.svg";
+import bin from "../assets/bin.svg";
 
 import "../styles/wishlists.scss";
 
 export default function Wishlists() {
   const { storedUser } = useStoredUser();
   const [wishlists, setWishlists] = useState([{}]);
-  const [items, setItems] = useState([{}]);
+  const [items, setItems] = useState([]);
   const [addNewWishlist, setAddNewWishlist] = useState(false);
   const { id } = useParams();
+
+  function getImages(infos) {
+    infos.forEach((info) => {
+      axios
+        .get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+            storedUser.id
+          }/wishlists/${info.id}/items`
+        )
+        .then((res) => {
+          setItems((prevItems) => [...prevItems, res.data]);
+        })
+        .catch((err) => console.error(err));
+    });
+  }
+
   useEffect(() => {
     axios
       .get(
@@ -22,24 +42,14 @@ export default function Wishlists() {
       )
       .then((res) => {
         setWishlists(res.data);
-      })
-      .catch((err) => console.error(err));
-  }, [wishlists]);
-
-  /* CALL ITEMS TO GET IMAGES */
-  useEffect(() => {
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
-          storedUser.id
-        }/wishlists/${id}/items/`
-      )
-
-      .then((res) => {
-        setItems(res.data);
+        getImages(res.data);
       })
       .catch((err) => console.error(err));
   }, []);
+
+  /* Items */
+
+  console.info({ items });
 
   /* NEW WISHLIST */
 
@@ -65,8 +75,20 @@ export default function Wishlists() {
         list
       );
 
-      // Ajoutez la nouvelle wishlist à l'état de wishlists
       setWishlists((prevWishlists) => [...prevWishlists, response.data]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (wishlistId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/wishlists/${wishlistId}`
+      );
+      setWishlists((prevWishlists) =>
+        prevWishlists.filter((wishlist) => wishlist.id !== wishlistId)
+      );
     } catch (error) {
       console.error(error);
     }
@@ -74,44 +96,80 @@ export default function Wishlists() {
 
   return (
     <div className="wrapper">
-      <div className="container">
-        <button
-          type="button"
-          className="new-wish"
-          onClick={() => setAddNewWishlist(true)}
-        >
-          Nouvelle Wishlist
-        </button>
-
-        <div className="wishlists">
-          {wishlists.map((wishlist) => (
-            <Link
-              to={`/wishlists/${wishlist.id}`}
+      {storedUser ? (
+        <>
+          <div className="container">
+            <button
               type="button"
-              className="wishlist"
-              key={wishlist.id}
+              className="new-wish"
+              onClick={() => setAddNewWishlist(true)}
             >
-              <div className="images">
-                {items.map((item) => (
+              Nouvelle Wishlist
+            </button>
+
+            <div className="wishlists">
+              {wishlists.map((wishlist) => {
+                return (
                   <>
-                    <img src={item.image} alt="" width={30} key={item.image} />
-                    <img src={item.image} alt="" width={30} key={item.image} />
-                    <img src={item.image} alt="" width={30} key={item.image} />
-                    <img src={item.image} alt="" width={30} key={item.image} />
+                    <Link
+                      to={`/wishlists/${wishlist.id}`}
+                      type="button"
+                      className="wishlist"
+                      key={wishlist.id}
+                    >
+                      <div className="images">
+                        {items.slice(0, 3).map((item) => {
+                          return (
+                            <div key={item.id} className="img">
+                              {item.map((img, index) => {
+                                if (index < 4) {
+                                  return wishlist.id === img.wishlist_id ? (
+                                    <img
+                                      src={
+                                        img.image
+                                          ? `${
+                                              import.meta.env.VITE_BACKEND_URL
+                                            }/${img.image}`
+                                          : defaut
+                                      }
+                                      alt=""
+                                      width={30}
+                                      key={img.id}
+                                    />
+                                  ) : (
+                                    ""
+                                  );
+                                }
+                                return null;
+                              })}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <h2>{wishlist.name}</h2>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(wishlist.id)}
+                    >
+                      <img src={bin} alt="" width={20} />
+                      <p hidden>je suis un bouton</p>
+                    </button>
                   </>
-                ))}
-              </div>
-              <h2>{wishlist.name}</h2>
-            </Link>
-          ))}
-        </div>
-      </div>
-      {addNewWishlist && (
-        <AddWishList
-          setAddNewWishlist={setAddNewWishlist}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-        />
+                );
+              })}
+            </div>
+          </div>
+          {addNewWishlist && (
+            <AddWishList
+              setAddNewWishlist={setAddNewWishlist}
+              handleSubmit={handleSubmit}
+              handleChange={handleChange}
+            />
+          )}
+        </>
+      ) : (
+        <SignIn />
       )}
     </div>
   );

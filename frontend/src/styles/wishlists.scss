@@ -23,11 +23,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        gap: 25px;
         .images {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
           width: 70px;
+          min-width: 70px;
           height: 70px;
           border: 1px solid black;
           margin-left: 3px;
@@ -36,6 +38,16 @@
           flex-grow: 1;
           font-weight: 500;
           font-size: 1rem;
+
+          text-align: left;
+        }
+
+        .bin {
+          z-index: 3;
+          border: none;
+          background-color: transparent;
+          align-self: start;
+          color: #ff0000;
         }
       }
     }
@@ -176,36 +188,49 @@
       align-items: center;
       flex-direction: column;
       height: 20%;
+      max-width: 200px;
+
+      h2 {
+        font-size: 1.1rem;
+        font-weight: 400;
+        align-self: center;
+        margin-bottom: 10px;
+      }
       .edit {
         align-self: end;
         margin-bottom: 3px;
+        margin-right: -20px;
         border: none;
         background-color: transparent;
       }
       .line {
-        width: 200px;
+        width: 230px;
         height: 1px;
-        background-color: black;
+        background-color: #bababa;
         margin: 15px 0;
       }
       .item {
         display: flex;
         justify-content: space-evenly;
         align-items: center;
-        gap: 30px;
+        gap: 20px;
+        .item-image {
+          min-width: 70px;
+          img {
+            border-radius: 10%;
+            box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+          }
+        }
 
         .item-content {
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-
+          min-width: 110px;
           gap: 10px;
-          h2 {
-            font-size: 1.1rem;
-            font-weight: 400;
-            align-self: start;
-          }
+          margin-left: 20px;
+          justify-self: end;
           small {
             align-self: start;
             margin-top: -10px;

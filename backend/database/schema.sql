@@ -28,7 +28,7 @@ ALTER TABLE `wishlist`
   ADD KEY `fk_wishlist_user` (`user_id`),
   ADD CONSTRAINT `fk_wishlist_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
-  -- Supprimer la contrainte existante
+
 
 ALTER TABLE `wishlist`
   MODIFY COLUMN `name` VARCHAR(25);
@@ -45,3 +45,11 @@ ADD CONSTRAINT `fk_item_wishlist` FOREIGN KEY (`wishlist_id`) REFERENCES `wishli
 ALTER TABLE `item`
   MODIFY COLUMN `user_id` int NOT NULL,
   MODIFY COLUMN `wishlist_id` int NOT NULL;
+ALTER TABLE `item`
+MODIFY COLUMN `url` TEXT;
+
+ALTER TABLE `item`
+DROP FOREIGN KEY `fk_item_wishlist`;
+
+ALTER TABLE `item`
+ADD CONSTRAINT `fk_item_wishlist` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE;

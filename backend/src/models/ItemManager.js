@@ -60,13 +60,20 @@ class ItemManager extends AbstractManager {
   // The U of CRUD - Update operation
 
   async update(name, website, url, image, price, id) {
-    const [result] = await this.database.query(
-      `update ${this.table} SET name = ?, website = ?, url = ?, image  = ?, price =  ? where id = ? `,
-      [name, website, url, image, price, id]
-    );
+    let query = `UPDATE ${this.table} SET name = ?, website = ?, url = ?, price = ?`;
+    const params = [name, website, url, price];
+
+    if (image) {
+      query += `, image = ?`;
+      params.push(image);
+    }
+
+    query += `WHERE id = ?`;
+    params.push(id);
+
+    const [result] = await this.database.query(query, params);
     return result;
   }
-
   /*  async updateImage(image, id, extension) {
     // Execute the SQL INSERT query to add a new item to the "item" table
 
