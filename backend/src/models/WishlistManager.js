@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const AbstractManager = require("./AbstractManager");
 
 class WishlistManager extends AbstractManager {
@@ -12,8 +13,8 @@ class WishlistManager extends AbstractManager {
   async create(wishlist) {
     // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await this.database.query(
-      `insert into ${this.table} (user_id) values (?)`,
-      [wishlist.user_id]
+      `insert into ${this.table} (name, user_id) values (?, ?)`,
+      [wishlist.name, wishlist.user_id]
     );
 
     // Return the ID of the newly inserted item
@@ -39,6 +40,25 @@ class WishlistManager extends AbstractManager {
 
     // Return the first row of the result, which represents the item
     return rows[0];
+  }
+
+  async readByUser(user_id) {
+    // Execute the SQL SELECT query to retrieve wishlists by user_id
+    const [rows] = await this.database.query(
+      `SELECT * FROM ${this.table} WHERE user_id = ?`,
+      [user_id]
+    );
+    // Return the rows of the result, which represents the wishlists
+    return rows;
+  }
+  // The D of CRUD - Delete operation
+
+  async delete(id) {
+    const [result] = await this.database.query(
+      `delete from ${this.table} where id = ?`,
+      [id]
+    );
+    return result;
   }
 }
 

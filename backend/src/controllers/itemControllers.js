@@ -1,3 +1,7 @@
+/* eslint-disable camelcase */
+const fs = require("fs");
+const jwt = require("jsonwebtoken");
+const path = require("path");
 // Import access to database tables
 const tables = require("../tables");
 
@@ -34,22 +38,85 @@ const read = async (req, res, next) => {
   }
 };
 
+const readByWishlist = async (req, res) => {
+  try {
+    // Appeler la méthode readAll de ItemManager avec user_id
+    const items = await tables.item.readByWishlist(
+      req.params.user_id,
+      req.params.wishlist_id
+    );
+    if (items.length === 0) {
+      res.sendStatus(404);
+    } else {
+      res.json(items);
+    }
+  } catch (error) {
+    // Gérer les erreurs
+    console.error(error);
+    res.status(500).send("Erreur lors de la récupération des items");
+  }
+};
 // The E of BREAD - Edit (Update) operation
 // This operation is not yet implemented
+const edit = async (req, res) => {
+  try {
+    let imagePath;
+    if (req.file) {
+      imagePath = `/assets/uploads/${req.file.filename}`;
+    }
+
+    // Passer imagePath seulement s'il est défini
+    const result = await tables.item.update(
+      req.body.name,
+      req.body.website,
+      req.body.url,
+      imagePath, // Ceci peut être undefined si aucune nouvelle image n'est fournie
+      req.body.price,
+      req.params.id
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Une erreur est survenue" });
+    }
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 // The A of BREAD - Add (Create) operation
 const add = async (req, res, next) => {
   // Extract the item data from the request body
   const item = req.body;
+  if (req.file) {
+    item.image = `/assets/uploads/${req.file.filename}`;
+  }
 
   try {
     // Insert the item into the database
     const insertId = await tables.item.create(item);
 
     // Respond with HTTP 201 (Created) and the ID of the newly inserted item
-    res.status(201).json({ insertId });
+    res.status(201).json({ insertId, image: item.image });
   } catch (err) {
     // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
+
+// The D of BREAD - Destroy (Delete) operation
+// This operation is not yet implemented
+const destroy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await tables.item.delete(id);
+    if (result.affectedRows === 0) {
+      res.status(404).send("id introuvable");
+    } else {
+      res.status(200).send(`Item ${id} supprimé`);
+    }
+  } catch (err) {
     next(err);
   }
 };
@@ -57,5 +124,9 @@ const add = async (req, res, next) => {
 module.exports = {
   browse,
   read,
+  readByWishlist,
+  edit,
+  /*   editImage, */
   add,
+  destroy,
 };

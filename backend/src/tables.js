@@ -6,13 +6,11 @@
 const ItemManager = require("./models/ItemManager");
 const UserManager = require("./models/UserManager");
 const WishlistManager = require("./models/WishlistManager");
-const WishlistItemManager = require("./models/WishlistItemManager");
 
 const managers = [
   UserManager,
   WishlistManager,
   ItemManager,
-  WishlistItemManager,
 
   // Add other managers here
 ];

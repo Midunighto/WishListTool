@@ -1,0 +1,325 @@
+@import "./root.scss";
+.wrapper {
+  .container {
+    .new-wish {
+      padding: 0.9rem;
+      width: 150px;
+      border-radius: 22px;
+      border: none;
+      box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+      background-color: $button-color;
+    }
+    .wishlists {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      .list-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        .delete {
+          background-color: transparent;
+          border: none;
+        }
+        .wishlist {
+          width: 100%;
+          height: 80px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 25px;
+          @media screen and (min-width: 700px) {
+            width: 60%;
+          }
+          .images {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 70px;
+            min-width: 70px;
+            height: 70px;
+            border: 1px solid rgb(130, 130, 130);
+            gap: 3px;
+            padding: 2px;
+            border-radius: 4%;
+
+            img {
+              width: 30px;
+              height: 30px;
+              border-radius: 10%;
+            }
+          }
+          #name {
+            flex-grow: 1;
+            font-weight: 400;
+            font-size: 1rem;
+
+            text-align: left;
+          }
+
+          .bin {
+            z-index: 3;
+            border: none;
+            background-color: transparent;
+            align-self: start;
+            color: #ff0000;
+          }
+        }
+      }
+    }
+  }
+  /* MODAL */
+  .wrapper-modal {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    overflow: hidden !important;
+    .container-modal {
+      height: fit-content;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+      width: 60%;
+      border: 1px solid $button-color-option2;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+      position: relative;
+      .close {
+        position: relative;
+        right: -45%;
+        top: -5px;
+        border: none;
+        background-color: transparent;
+        @media screen and (min-width: 700px) {
+          right: -48%;
+        }
+      }
+      .new-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        input {
+          height: 2rem;
+          border-radius: 5px;
+          border: none;
+          margin-bottom: 20px;
+          border: 1px solid rgba(128, 128, 128, 0.2);
+        }
+        button {
+          padding: 0.9rem;
+          width: 100px;
+          border-radius: 22px;
+          border: none;
+          box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+          background-color: $button-color-option2;
+          color: white;
+        }
+      }
+      /* ADD ITEM MODAL */
+      .new-item {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        label {
+          align-self: start;
+          margin-left: 15px;
+        }
+        .input-image {
+          align-self: center;
+        }
+        input {
+          height: 2rem;
+          border-radius: 5px;
+          border: none;
+          margin-bottom: 20px;
+          border: 1px solid rgba(128, 128, 128, 0.2);
+          width: 90%;
+        }
+        .input-image {
+          text-align: center;
+          margin-bottom: 10px;
+        }
+        button {
+          padding: 0.9rem;
+          width: 130px;
+          border-radius: 22px;
+          border: none;
+          box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+          background-color: $button-color-option2;
+          color: white;
+        }
+      }
+    }
+    .delete {
+      border: none;
+      background-color: transparent;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: red;
+    }
+  }
+}
+/* PAGE WISHLIST */
+
+.wrapper {
+  gap: 10px;
+  h1 {
+    font-weight: 400;
+    text-shadow: 3px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  .list-container {
+    background-color: white;
+    height: fit-content;
+    min-height: 60vh;
+    width: 65%;
+    box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .add-item {
+      background-color: $button-color;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .item-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 20%;
+      max-width: 200px;
+
+      h2 {
+        font-size: 1.1rem;
+        font-weight: 400;
+        align-self: center;
+        margin-bottom: 10px;
+      }
+      .edit {
+        align-self: end;
+        margin-bottom: 3px;
+        margin-right: -20px;
+        border: none;
+        background-color: transparent;
+      }
+      .line {
+        width: 230px;
+        height: 1px;
+        background-color: #bababa;
+        margin: 15px 0;
+      }
+      .item {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 20px;
+        .item-image {
+          min-width: 70px;
+          img {
+            border-radius: 10%;
+            box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+          }
+        }
+
+        .item-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-width: 110px;
+          gap: 10px;
+          margin-left: 20px;
+          justify-self: end;
+          small {
+            align-self: start;
+            margin-top: -10px;
+            font-style: italic;
+          }
+          a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 25px;
+            padding: 3px;
+            border-radius: 20px;
+            border: none;
+            background-color: $button-color;
+            box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+            align-self: start;
+            justify-self: end;
+            margin: 10px 0;
+            &:hover {
+              transform: scale(1.05);
+              filter: brightness(110%);
+            }
+          }
+        }
+      }
+    }
+  }
+  #validate {
+    background-color: #fffdfd;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    .validate-content {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      .close {
+        top: -30px;
+      }
+      h1 {
+        font-size: 1rem;
+        text-align: center;
+      }
+      .button-row {
+        display: flex;
+        justify-content: space-around;
+        gap: 25px;
+        button.validate-button {
+          padding: 0.9rem;
+          width: 70px;
+          border-radius: 22px;
+          border: none;
+          box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+          background-color: $button-color;
+          margin-top: 40px;
+          color: white;
+        }
+      }
+    }
+  }
+}

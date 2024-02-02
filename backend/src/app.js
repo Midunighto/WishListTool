@@ -4,6 +4,7 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.static("public"));
 // Configure it
 
 /* ************************************************************************* */
@@ -31,9 +32,11 @@ app.use(
   cors({
     origin: [
       process.env.FRONTEND_URL, // keep this one, after checking the value in `backend/.env`
+
       /*     "http://mysite.com",
       "http://another-domain.com", */
     ],
+    credentials: true,
   })
 );
 

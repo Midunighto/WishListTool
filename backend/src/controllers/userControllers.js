@@ -1,5 +1,6 @@
 // Import access to database tables
 const tables = require("../tables");
+const jwt = require("jsonwebtoken");
 
 // The B of BREAD - Browse (Read All) operation
 const browse = async (req, res, next) => {
@@ -36,6 +37,17 @@ const read = async (req, res, next) => {
 
 // The E of BREAD - Edit (Update) operation
 // This operation is not yet implemented
+const editTheme = async (req, res) => {
+  try {
+    const result = await tables.user.updateTheme(req.body.theme, req.params.id);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Un erreur est survenue" });
+    }
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 // The A of BREAD - Add (Create) operation
 const add = async (req, res, next) => {
@@ -57,11 +69,33 @@ const add = async (req, res, next) => {
 // The D of BREAD - Destroy (Delete) operation
 // This operation is not yet implemented
 
+// LOGIN
+
+const login = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const userToken = jwt.sign({ user }, process.env.APP_SECRET);
+    res.cookie("userToken", userToken, { httpOnly: true });
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+};
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("userToken");
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
 // Ready to export the controller functions
 module.exports = {
   browse,
   read,
-  // edit,
+  editTheme,
   add,
   // destroy,
+  login,
+  logout,
 };

@@ -33,6 +33,17 @@ class UserManager extends AbstractManager {
     return rows[0];
   }
 
+  async readByUser(id) {
+    // Execute the SQL SELECT query to retrieve a specific item by its ID
+    const [rows] = await this.database.query(
+      `select * from ${this.table} where id = ?`,
+      [id]
+    );
+
+    // Return the first row of the result, which represents the item
+    return rows[0];
+  }
+
   async readAll() {
     // Execute the SQL SELECT query to retrieve all items from the "item" table
     const [rows] = await this.database.query(`select * from ${this.table}`);
@@ -43,7 +54,13 @@ class UserManager extends AbstractManager {
 
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing item
-
+  async updateTheme(theme, id) {
+    const [result] = await this.database.query(
+      `update ${this.table} SET theme = ? where id = ?`,
+      [theme, id]
+    );
+    return result;
+  }
   // async update(item) {
   //   ...
   // }
@@ -54,6 +71,21 @@ class UserManager extends AbstractManager {
   // async delete(id) {
   //   ...
   // }
+  async checkEmail(email) {
+    const [rows] = await this.database.query(
+      `select * from ${this.table} where email=?`,
+      [email]
+    );
+    return rows;
+  }
+
+  async checkPseudo(pseudo) {
+    const [rows] = await this.database.query(
+      `select * from ${this.table} where pseudo=?`,
+      [pseudo]
+    );
+    return rows;
+  }
 }
 
 module.exports = UserManager;
