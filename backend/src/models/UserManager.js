@@ -3,20 +3,20 @@ const AbstractManager = require("./AbstractManager");
 class UserManager extends AbstractManager {
   constructor() {
     // Call the constructor of the parent class (AbstractManager)
-    // and pass the table name "item" as configuration
+    // and pass the table name "user" as configuration
     super({ table: "user" });
   }
 
   // The C of CRUD - Create operation
 
   async create(user) {
-    // Execute the SQL INSERT query to add a new item to the "item" table
+    // Execute the SQL INSERT query to add a new item to the "user" table
     const [result] = await this.database.query(
       `insert into ${this.table} (pseudo, email, pwd) values (?, ?, ?)`,
       [user.pseudo, user.email, user.pwd]
     );
 
-    // Return the ID of the newly inserted item
+    // Return the ID of the newly inserted user
     return result.insertId;
   }
 

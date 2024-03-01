@@ -44,11 +44,15 @@ export default function SignUp({ setSignedUp }) {
 
       console.info(res.status);
     } catch (err) {
-      if (err.response.status === 409) {
-        error("L'email ou pseudo existe déjà");
-      }
-      if (err.response.status === 400) {
-        error("Merci de remplir tous les champs");
+      if (err.response) {
+        if (err.response.status === 409) {
+          error("L'email ou pseudo existe déjà");
+        }
+        if (err.response.status === 400) {
+          error("Merci de remplir tous les champs");
+        }
+      } else {
+        console.error(err);
       }
     }
   };
@@ -97,13 +101,13 @@ export default function SignUp({ setSignedUp }) {
           />
         </div>
         <div className="group-form">
-          <label htmlFor="pwd" id="pwd">
+          <label htmlFor="confirmPwd" id="confirmPwd">
             Confirmer le mot de passe
           </label>
           <input
             type="password"
-            name="pwd"
-            placeholder="Mot de passe"
+            name="confirmPwd"
+            placeholder="Confirmer le mot de passe"
             onChange={handleChange}
           />
         </div>

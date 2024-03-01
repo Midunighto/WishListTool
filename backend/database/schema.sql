@@ -3,7 +3,7 @@ CREATE TABLE `user`(
   `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
   `pseudo` varchar(50) NOT NULL, 
   `email` varchar(50) NOT NULL, 
-  `pwd` varchar(50) NOT NULL, 
+  `pwd` varchar(255) NOT NULL, 
   `theme` varchar(50), 
   UNIQUE KEY `pseudo` (`pseudo`),
   UNIQUE KEY `email`(`email`)
@@ -12,6 +12,7 @@ CREATE TABLE `user`(
 CREATE TABLE `wishlist`(
   `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
   `creation_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `name` VARCHAR(50) NOT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -21,7 +22,7 @@ CREATE TABLE `item`(
   `website` VARCHAR(50) NOT NULL,
   `url` VARCHAR(350) NOT NULL,
   `image` VARCHAR(250),
-  `price` int NOT NULL,
+  `price` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -54,3 +55,6 @@ DROP FOREIGN KEY `fk_item_wishlist`;
 
 ALTER TABLE `item`
 ADD CONSTRAINT `fk_item_wishlist` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `user`
+MODIFY COLUMN `theme` INT(1); 

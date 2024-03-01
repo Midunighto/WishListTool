@@ -21,13 +21,23 @@ export default function Wishlist() {
   const [modal, setModal] = useState(false);
   /* CAL WISHLIST TO GET WISHLIST.NAME */
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/wishlists/${id}`)
-      .then((res) => {
-        setWishlists(res.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+    // Vérifier si storedUser est défini avant de faire l'appel à l'API
+    if (storedUser) {
+      const loadData = async () => {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+              storedUser.id
+            }/wishlists/${id}/items/`
+          );
+          setItems(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      loadData();
+    }
+  }, [reloadData, storedUser, id]);
 
   /* CALL ITEMS */
 
@@ -97,17 +107,6 @@ export default function Wishlist() {
         <>
           <h1>{wishlists.name}</h1>
           <div className="list-container">
-            <button
-              type="button"
-              className="add-item"
-              onClick={() => {
-                setModal(true);
-              }}
-            >
-              <img src={add} alt="symbole plus" width={50} />
-              <p className="hidden">ajouter un item</p>
-            </button>
-
             {items.length > 0 &&
               items.map((item) => (
                 <Items
@@ -118,6 +117,16 @@ export default function Wishlist() {
                   storedUser={storedUser}
                 />
               ))}
+            <button
+              type="button"
+              className="add-item"
+              onClick={() => {
+                setModal(true);
+              }}
+            >
+              <img src={add} alt="symbole plus" width={50} />
+              <p className="hidden">ajouter un item</p>
+            </button>
           </div>
           {/*     {console.info(items[0].length)} */}
           {modal && (

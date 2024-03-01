@@ -20,7 +20,7 @@ export default function ValidateItem({
           <p className="hidden"> fermer</p>
         </button>
         <div className="validate-content">
-          <h1>Voulez-vous vraiment supprimer ce produit ? </h1>
+          <h1>Voulez-vous vraiment supprimer cet article ? </h1>
           <div className="button-row">
             <button
               className="validate-button"
