@@ -74,7 +74,7 @@ const add = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { user } = req;
-    const userToken = jwt.sign({ user }, process.env.APP_SECRET);
+    const userToken = jwt.sign({ id: user.id }, process.env.APP_SECRET);
     res.cookie("userToken", userToken, { httpOnly: true });
     res.json({ user });
   } catch (err) {
@@ -89,7 +89,7 @@ const refreshToken = async (req, res) => {
       res.status(404).send("No user found");
     }
     delete result.password;
-    const userToken = jwt.sign({ user: result }, process.env.APP_SECRET, {
+    const userToken = jwt.sign({ id }, process.env.APP_SECRET, {
       expiresIn: "10d",
     });
     res.cookie("token", userToken, {
