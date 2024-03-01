@@ -47,6 +47,9 @@ body {
     border-radius: 25px;
     backdrop-filter: blur(10px);
     box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+     @media screen and (min-width: 700px) {
+        max-width: 520px;
+      }
   }
 }
 a {

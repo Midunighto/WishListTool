@@ -15,7 +15,7 @@ import Home from "./Home";
 import "../styles/account.scss";
 
 export default function Account() {
-  const { storedUser } = useStoredUser();
+  const { storedUser, setStoredUser } = useStoredUser();
   const [darkTheme, setDarkTheme] = useState(false);
 
   console.log(storedUser);
@@ -67,12 +67,23 @@ export default function Account() {
     },
   }));
 
-  const handleRefresh = () => {
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      // Appeler la route de déconnexion sur le serveur
+      await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/logout`, {
+        withCredentials: true,
+      });
+
+      // Rediriger l'utilisateur vers la page d'accueil après la déconnexion
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   const handleChange = () => {
     setDarkTheme(!darkTheme);
+    darkTheme ? (storedUser.theme = 2) : (storedUser.theme = 1);
   };
   const handleUserTheme = async () => {
     const updateTheme = { theme: storedUser.theme };
@@ -107,13 +118,22 @@ export default function Account() {
               <small>à venir</small>
               <FormGroup>
                 <FormControlLabel
-                  control={<MaterialUISwitch sx={{ m: 1 }} disabled />}
+                  control={
+                    <MaterialUISwitch
+                      sx={{ m: 1 }}
+                      checked={storedUser.theme === 2}
+                      onChange={(e) => {
+                        handleChange(e);
+                        handleUserTheme();
+                      }}
+                    />
+                  }
                 />
               </FormGroup>
             </div>
             {console.info(darkTheme)}
             <div className="account-footer">
-              <button type="button" className="logout" onClick={handleRefresh}>
+              <button type="button" className="logout" onClick={handleLogout}>
                 Se déconnecter
               </button>
               <button type="button">supprimer mon compte</button>

@@ -14,40 +14,50 @@ import ValidateWishlist from "../components/ValidateWishlist";
 
 export default function Wishlists() {
   const { storedUser } = useStoredUser();
-  const [wishlists, setWishlists] = useState([{}]);
+  const [wishlists, setWishlists] = useState([]);
   const [items, setItems] = useState([]);
   const [addNewWishlist, setAddNewWishlist] = useState(false);
   const [validate, setValidate] = useState(false);
   const { id } = useParams();
 
-  function getImages(infos) {
-    infos.forEach((info) => {
-      axios
-        .get(
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Récupérer l'état du serveur lors du chargement de la page
+        const wishlistsResponse = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/users/${
             storedUser.id
-          }/wishlists/${info.id}/items`
-        )
-        .then((res) => {
-          setItems((prevItems) => [...prevItems, res.data]);
-        })
-        .catch((err) => console.error(err));
-    });
-  }
+          }/wishlists`
+        );
+        setWishlists(wishlistsResponse.data);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
-          storedUser.id
-        }/wishlists`
-      )
-      .then((res) => {
-        setWishlists(res.data);
-        getImages(res.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+        // Créer un tableau de promesses pour chaque requête d'items
+        const itemPromises = wishlistsResponse.data.map(async (info) => {
+          try {
+            const itemsResponse = await axios.get(
+              `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+                storedUser.id
+              }/wishlists/${info.id}/items`
+            );
+            return itemsResponse.data;
+          } catch (error) {
+            console.error(error);
+            return [];
+          }
+        });
+
+        // Attendre la résolution de toutes les promesses
+        const itemResults = await Promise.all(itemPromises);
+
+        // Mettre à jour l'état items avec les résultats
+        setItems(itemResults);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [storedUser.id]); // Assurez-vous que le useEffect est exécuté à chaque changement de storedUser.id
 
   /* Items */
 
@@ -59,6 +69,7 @@ export default function Wishlists() {
     name: "",
     user_id: storedUser.id,
   });
+
   const handleChange = (e) => {
     setList({
       ...list,
@@ -72,14 +83,15 @@ export default function Wishlists() {
       return;
     }
     try {
+      console.log("Sending request with data:", list);
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/wishlists`,
         list
       );
-
+      console.log("Response:", response);
       setWishlists((prevWishlists) => [...prevWishlists, response.data]);
     } catch (error) {
-      console.error(error);
+      console.error("Error:", error);
     }
   };
 
@@ -113,7 +125,7 @@ export default function Wishlists() {
               {wishlists.map((wishlist) => {
                 return (
                   <>
-                    <div className="list-row">
+                    <div className="list-row" key={wishlist.id}>
                       <Link
                         to={`/wishlists/${wishlist.id}`}
                         type="button"
@@ -121,33 +133,32 @@ export default function Wishlists() {
                         key={wishlist.id}
                       >
                         <div className="images">
-                          {items.slice(0, 3).map((item) => {
-                            return (
-                              <div key={item.id} className="img">
-                                {item.map((img, index) => {
-                                  if (index < 4) {
-                                    return wishlist.id === img.wishlist_id ? (
+                          {items &&
+                          Array.isArray(items) &&
+                          items.length > 0 &&
+                          Array.isArray(items[0]) ? (
+                            items[0]
+                              .slice(-4) // Prend les 4 derniers éléments
+                              .map((item) => (
+                                <div key={item.id} className="img">
+                                  {item.image &&
+                                    wishlist &&
+                                    wishlist.id === item.wishlist_id && (
                                       <img
-                                        src={
-                                          img.image
-                                            ? `${
-                                                import.meta.env.VITE_BACKEND_URL
-                                              }/${img.image}`
-                                            : defaut
-                                        }
+                                        src={`${
+                                          import.meta.env.VITE_BACKEND_URL
+                                        }/${item.image}`}
                                         alt=""
-                                        key={img.id}
+                                        key={item.id}
                                       />
-                                    ) : (
-                                      ""
-                                    );
-                                  }
-                                  return null;
-                                })}
-                              </div>
-                            );
-                          })}
+                                    )}
+                                </div>
+                              ))
+                          ) : (
+                            <p>Aucun élément dans la wishlist</p>
+                          )}
                         </div>
+
                         <h2 id="name">{wishlist.name}</h2>
                       </Link>
                       <button
@@ -166,6 +177,7 @@ export default function Wishlists() {
                         handleDelete={handleDelete}
                         setValidate={setValidate}
                         wishlist={wishlist}
+                        key={`validate-${wishlist.id}`}
                       />
                     )}
                   </>

@@ -175,7 +175,7 @@ export default function Items({ item, setItems }) {
                   />
                   <label htmlFor="name">URL</label>
                   <input
-                    type="text"
+                    type="number"
                     name="url"
                     value={editItem.url}
                     required="required"

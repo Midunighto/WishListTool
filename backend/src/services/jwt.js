@@ -8,7 +8,7 @@ const checkToken = async (req, res, next) => {
   try {
     const decoded = jwt.verify(userToken, process.env.APP_SECRET);
     if (decoded) {
-      req.decoded = decoded.player;
+      req.decoded = decoded.user;
       return next();
     }
     res.clearCookie("userToken");
