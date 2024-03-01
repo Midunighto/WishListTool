@@ -5,7 +5,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { success, error } from "../services/toast";
 
-export default function SignUp({ setSignedUp }) {
+export default function SignUp({ setSignedUp }) {;
   const [user, setUser] = useState({
     pseudo: "",
     email: "",
@@ -117,6 +117,7 @@ export default function SignUp({ setSignedUp }) {
       >
         j'ai déjà un compte
       </button>
+
     </div>
   );
 }

@@ -54,3 +54,6 @@ DROP FOREIGN KEY `fk_item_wishlist`;
 
 ALTER TABLE `item`
 ADD CONSTRAINT `fk_item_wishlist` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `user`
+MODIFY COLUMN `theme`INT ;

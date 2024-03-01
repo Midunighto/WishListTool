@@ -14,6 +14,7 @@ import Account from "./pages/Account";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -33,16 +34,21 @@ const router = createBrowserRouter([
         element: <AuthSignIn />,
       },
       {
-        path: "/my-wishlists",
-        element: <Wishlists />,
-      },
-      {
-        path: "/wishlists/:id",
-        element: <Wishlist />,
-      },
-      {
-        path: "/account",
-        element: <Account />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/my-wishlists",
+            element: <Wishlists />,
+          },
+          {
+            path: "/wishlists/:id",
+            element: <Wishlist />,
+          },
+          {
+            path: "/account",
+            element: <Account />,
+          },
+        ],
       },
     ],
   },

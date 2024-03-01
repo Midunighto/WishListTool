@@ -1,22 +1,30 @@
 import { Outlet } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { useStoredUser } from "./contexts/UserContext";
+
 import Navbar from "./components/Navbar";
 
 import "./styles/root.scss";
 
 function App() {
-  /*  const handleChange = (e) => {
-    if (e.target.name === "image") {
-      //BIEN APPELER L'INPUT FILE "IMAGE"
-      setUser({
-        ...user,
-        [e.target.name]: e.target.files[0],
+  const { setStoredUser } = useStoredUser();
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/protected`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setStoredUser(res.data);
+        window.localStorage.setItem("player", JSON.stringify(res.data));
+      })
+      .catch((err) => {
+        setStoredUser(false);
+        window.localStorage.removeItem("player");
+        console.error(err);
       });
-    } else
-      setUser({
-        ...user,
-        [e.target.name]: e.target.value,
-      });
-  }; */
+  }, []);
 
   return (
     <>

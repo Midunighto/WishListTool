@@ -13,7 +13,7 @@ import close from "../assets/close.svg";
 import upload from "../assets/upload.png";
 
 export default function Wishlist() {
-  const { storedUser } = useStoredUser();
+  const { storedUser, refreshUser } = useStoredUser();
   const [items, setItems] = useState([]);
   const [wishlists, setWishlists] = useState([{}]);
   const [reloadData, setReloadData] = useState(false);

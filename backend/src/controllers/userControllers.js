@@ -51,14 +51,14 @@ const editTheme = async (req, res) => {
 
 // The A of BREAD - Add (Create) operation
 const add = async (req, res, next) => {
-  // Extract the item data from the request body
+  // Extract the user data from the request body
   const user = req.body;
 
   try {
-    // Insert the item into the database
+    // Insert the user into the database
     const insertId = await tables.user.create(user);
 
-    // Respond with HTTP 201 (Created) and the ID of the newly inserted item
+    // Respond with HTTP 201 (Created) and the ID of the newly inserted user
     res.status(201).json({ insertId });
   } catch (err) {
     // Pass any errors to the error-handling middleware
@@ -73,7 +73,7 @@ const add = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const user = req.user;
+    const { user } = req;
     const userToken = jwt.sign({ user }, process.env.APP_SECRET);
     res.cookie("userToken", userToken, { httpOnly: true });
     res.json({ user });
@@ -81,6 +81,27 @@ const login = async (req, res, next) => {
     next(err);
   }
 };
+const refreshToken = async (req, res) => {
+  const { id } = req.decoded;
+  try {
+    const result = await tables.user.read(id);
+    if (!result) {
+      res.status(404).send("No user found");
+    }
+    delete result.password;
+    const userToken = jwt.sign({ user: result }, process.env.APP_SECRET, {
+      expiresIn: "10d",
+    });
+    res.cookie("token", userToken, {
+      httpOnly: true,
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const logout = async (req, res, next) => {
   try {
     res.clearCookie("userToken");
@@ -98,4 +119,5 @@ module.exports = {
   // destroy,
   login,
   logout,
+  refreshToken,
 };

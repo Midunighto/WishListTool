@@ -10,6 +10,7 @@ const router = express.Router();
 const userControllers = require("./controllers/userControllers");
 const signup = require("./services/signup");
 const { hashPassword, verifyPassword } = require("./services/hashPwd");
+const { checkToken } = require("./services/jwt");
 
 // Route to get a list of items
 router.get("/users", userControllers.browse);
@@ -17,12 +18,13 @@ router.get("/users", userControllers.browse);
 // Route to get a specific item by ID
 router.get("/users/:id", userControllers.read);
 
-// Route to add a new item
+// Route to add a new user
 router.post("/users", signup, hashPassword, userControllers.add);
 
 router.put("/users/:id/addtheme", userControllers.editTheme);
 
 router.post("/login", verifyPassword, userControllers.login);
+router.get("/protected", checkToken, userControllers.refreshToken);
 router.get("/logout", userControllers.logout);
 /* ************************************************************************* */
 const wishlistControllers = require("./controllers/wishlistControllers");

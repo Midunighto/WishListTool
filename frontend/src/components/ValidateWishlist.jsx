@@ -19,7 +19,7 @@ export default function ValidateWishlist({
           <p className="hidden"> fermer</p>
         </button>
         <div className="validate-content">
-          <h1>Voulez-vous vraiment supprimer cette wishlist? </h1>
+          <h1>Voulez-vous vraiment supprimer la wishlist {wishlist.name}? </h1>
           <div className="button-row">
             <button
               className="validate-button"
