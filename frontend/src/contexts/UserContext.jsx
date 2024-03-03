@@ -11,7 +11,7 @@ export function UserProvider({ children }) {
   const refreshUser = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/players/${storedUser.id}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${storedUser.id}`
       );
       setStoredUser(response.data);
     } catch (error) {
@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
   };
 
   const value = useMemo(() => {
-    return { storedUser, setStoredUser };
+    return { storedUser, setStoredUser, refreshUser };
   }, [storedUser, setStoredUser, refreshUser]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

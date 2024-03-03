@@ -29,17 +29,6 @@ export default function Items({ item, setItems }) {
     wishlist_id: item.wishlist_id,
   });
 
-  /*   useEffect(() => {
-    setEditItem({
-      name: item.name,
-      website: item.website,
-      url: item.url,
-      price: item.price,
-      user_id: storedUser.id,
-      wishlist_id: item.wishlist_id,
-    });
-  }, [item, storedUser.id]); */
-
   const handleEdit = async () => {
     const formData = new FormData();
     Object.keys(editItem).forEach((key) => {

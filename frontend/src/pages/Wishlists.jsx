@@ -8,6 +8,7 @@ import SignIn from "../components/SignIn";
 
 import defaut from "../assets/default.svg";
 import bin from "../assets/bin.svg";
+import { error } from "../services/toast";
 
 import "../styles/wishlists.scss";
 import ValidateWishlist from "../components/ValidateWishlist";
@@ -78,20 +79,24 @@ export default function Wishlists() {
   };
 
   const handleSubmit = async () => {
-    if (list.name.trim() === "") {
-      alert("Merci de renseigner un nom");
+    if (!list.name) {
+      error("Merci de renseigner un nom");
       return;
     }
     try {
-      console.log("Sending request with data:", list);
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/wishlists`,
         list
       );
-      console.log("Response:", response);
+
       setWishlists((prevWishlists) => [...prevWishlists, response.data]);
-    } catch (error) {
+    } catch (err) {
       console.error("Error:", error);
+    } finally {
+      if (list.name) {
+        setAddNewWishlist(false);
+        setList({ name: "", user_id: storedUser.id });
+      }
     }
   };
 
@@ -103,7 +108,7 @@ export default function Wishlists() {
       setWishlists((prevWishlists) =>
         prevWishlists.filter((wishlist) => wishlist.id !== wishlistId)
       );
-    } catch (error) {
+    } catch (err) {
       console.error(error);
     }
   };
@@ -136,27 +141,25 @@ export default function Wishlists() {
                           {items &&
                           Array.isArray(items) &&
                           items.length > 0 &&
-                          Array.isArray(items[0]) ? (
-                            items[0]
-                              .slice(-4) // Prend les 4 derniers éléments
-                              .map((item) => (
-                                <div key={item.id} className="img">
-                                  {item.image &&
-                                    wishlist &&
-                                    wishlist.id === item.wishlist_id && (
-                                      <img
-                                        src={`${
-                                          import.meta.env.VITE_BACKEND_URL
-                                        }/${item.image}`}
-                                        alt=""
-                                        key={item.id}
-                                      />
-                                    )}
-                                </div>
-                              ))
-                          ) : (
-                            <p>Aucun élément dans la wishlist</p>
-                          )}
+                          Array.isArray(items[0])
+                            ? items[0]
+                                .slice(-4) // Prend les 4 derniers éléments
+                                .map((item) => (
+                                  <div key={item.id} className="img">
+                                    {item.image &&
+                                      wishlist &&
+                                      wishlist.id === item.wishlist_id && (
+                                        <img
+                                          src={`${
+                                            import.meta.env.VITE_BACKEND_URL
+                                          }/${item.image}`}
+                                          alt=""
+                                          key={item.id}
+                                        />
+                                      )}
+                                  </div>
+                                ))
+                            : null}
                         </div>
 
                         <h2 id="name">{wishlist.name}</h2>

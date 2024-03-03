@@ -30,7 +30,6 @@ export default function AddWishList({
             type="button"
             onClick={() => {
               handleSubmit();
-              setAddNewWishlist(false);
             }}
           >
             Valider

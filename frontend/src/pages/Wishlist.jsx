@@ -7,6 +7,7 @@ import { useStoredUser } from "../contexts/UserContext";
 import "../styles/wishlists.scss";
 import Items from "../components/Items";
 import SignIn from "../components/SignIn";
+import { error } from "../services/toast";
 
 import add from "../assets/add.svg";
 import close from "../assets/close.svg";
@@ -69,22 +70,40 @@ export default function Wishlist() {
   });
 
   const handleSubmitNewItem = async () => {
+    if (!newItem.name || !newItem.website || !newItem.url || !newItem.price) {
+      error("Merci de remplir tous les champs obligatoires");
+      return;
+    }
+
     const formData = new FormData();
     for (const key in newItem) {
       if (Object.prototype.hasOwnProperty.call(newItem, key)) {
         formData.append(key, newItem[key]);
       }
     }
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/items`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
+
       setItems([...items, response.data]);
       setReloadData((prev) => !prev);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setNewItem({
+        name: "",
+        website: "",
+        url: "",
+        image: "",
+        price: "",
+        user_id: storedUser.id,
+        wishlist_id: id,
+      });
+      setModal(false);
     }
   };
 
@@ -188,7 +207,6 @@ export default function Wishlist() {
                     type="button"
                     onClick={() => {
                       handleSubmitNewItem();
-                      setModal(false);
                     }}
                   >
                     Valider

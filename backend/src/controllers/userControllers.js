@@ -74,6 +74,7 @@ const add = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { user } = req;
+
     const userToken = jwt.sign({ id: user.id }, process.env.APP_SECRET);
     res.cookie("userToken", userToken, { httpOnly: true });
     res.json({ user });
@@ -81,6 +82,7 @@ const login = async (req, res, next) => {
     next(err);
   }
 };
+
 const refreshToken = async (req, res) => {
   const { id } = req.decoded;
   try {

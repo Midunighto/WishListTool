@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 import close from "../assets/close.svg";
+import { success } from "../services/toast";
 
 export default function ValidateItem({
   setValidate,
@@ -29,6 +30,7 @@ export default function ValidateItem({
                 setValidate(false);
                 handleDelete(item.id);
                 setModal(false);
+                success(`L'article a été supprimé avec succès`);
               }}
             >
               Oui

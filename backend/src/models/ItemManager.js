@@ -11,7 +11,6 @@ class ItemManager extends AbstractManager {
   // The C of CRUD - Create operation
 
   async create(item) {
-    // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await this.database.query(
       `insert into ${this.table} (name, website, url, image, price, user_id, wishlist_id) values (?, ?, ?, ?, ?, ?, ?)`,
       [

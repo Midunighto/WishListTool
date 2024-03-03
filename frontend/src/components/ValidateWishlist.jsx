@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 import close from "../assets/close.svg";
+import { success } from "../services/toast";
 
 export default function ValidateWishlist({
   setValidate,
@@ -27,6 +28,9 @@ export default function ValidateWishlist({
               onClick={() => {
                 setValidate(false);
                 handleDelete(wishlist.id);
+                success(
+                  `La wishlist ${wishlist.name} a été supprimée avec succès`
+                );
               }}
             >
               Oui

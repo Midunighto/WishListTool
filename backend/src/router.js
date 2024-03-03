@@ -1,11 +1,9 @@
 const express = require("express");
-const multer = require("multer");
 
 const uploadFile = require("./services/multer");
 
 const router = express.Router();
 
-/* const upload = multer({ dest: "public/assets/images" }); */
 /* ************************************************************************* */
 const userControllers = require("./controllers/userControllers");
 const signup = require("./services/signup");

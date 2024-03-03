@@ -1,8 +1,9 @@
+import Cookies from "js-cookie";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
-import { useStoredUser } from "./contexts/UserContext";
 
+import { useStoredUser } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
 
 import "./styles/root.scss";
@@ -16,12 +17,15 @@ function App() {
         withCredentials: true,
       })
       .then((res) => {
-        setStoredUser(res.data);
-        window.localStorage.setItem("player", JSON.stringify(res.data));
+        const { id, pseudo, theme, email } = res.data;
+        const userData = { id, pseudo, theme, email };
+
+        setStoredUser(userData);
+        Cookies.set("user", JSON.stringify(userData), { expires: 7 });
       })
       .catch((err) => {
         setStoredUser(false);
-        window.localStorage.removeItem("player");
+        Cookies.remove("user");
         console.error(err);
       });
   }, []);
@@ -29,7 +33,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <Outlet />;
+      <Outlet />
     </>
   );
 }

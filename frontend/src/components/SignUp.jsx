@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { React, useState } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { success, error } from "../services/toast";
 
-export default function SignUp({ setSignedUp }) {
+export default function SignUp() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     pseudo: "",
     email: "",
@@ -15,6 +16,7 @@ export default function SignUp({ setSignedUp }) {
     confirmPwd: "",
   });
   const [created, setCreated] = useState(false);
+
   const handleChange = (e) => {
     setUser({
       ...user,
@@ -29,6 +31,16 @@ export default function SignUp({ setSignedUp }) {
   const handleRealSubmit = async (e) => {
     e.preventDefault();
 
+    if (!user.pseudo || !user.email || !user.pwd || !password.confirmPwd) {
+      error("Merci de remplir tous les champs");
+      return;
+    }
+
+    if (user.pwd !== password.confirmPwd) {
+      error("Les mots de passe ne correspondent pas");
+      return;
+    }
+
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/users`,
@@ -38,7 +50,7 @@ export default function SignUp({ setSignedUp }) {
         }
       );
       if (res.status === 201) {
-        success("Compte créée avec succès");
+        success("Compte créé avec succès");
         setCreated(true);
       }
 
@@ -46,7 +58,7 @@ export default function SignUp({ setSignedUp }) {
     } catch (err) {
       if (err.response) {
         if (err.response.status === 409) {
-          error("L'email ou pseudo existe déjà");
+          error("L'email ou le pseudo existe déjà");
         }
         if (err.response.status === 400) {
           error("Merci de remplir tous les champs");
@@ -56,9 +68,11 @@ export default function SignUp({ setSignedUp }) {
       }
     }
   };
+
   if (created) {
     return <Navigate to="/signin" />;
   }
+
   return (
     <div className="container">
       <form
@@ -117,13 +131,14 @@ export default function SignUp({ setSignedUp }) {
       <button
         type="button"
         className="link-button"
-        onClick={() => setSignedUp(true)}
+        onClick={() => navigate("/signin")}
       >
-        j'ai déjà un compte
+        J'ai déjà un compte
       </button>
     </div>
   );
 }
+
 SignUp.propTypes = {
   setSignedUp: PropTypes.func.isRequired,
 };

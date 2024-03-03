@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { React, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { useStoredUser } from "../contexts/UserContext";
-import { error } from "../services/toast";
+import { error, success } from "../services/toast";
 
-export default function SignIn({ setSignedUp }) {
+export default function SignIn() {
   const { storedUser, setStoredUser } = useStoredUser();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     pseudo: "",
@@ -23,6 +24,12 @@ export default function SignIn({ setSignedUp }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!user.pseudo || !user.pwd) {
+      error("Merci de remplir tous les champs");
+      return;
+    }
+
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/login`,
@@ -31,20 +38,33 @@ export default function SignIn({ setSignedUp }) {
           withCredentials: true,
         }
       );
+
       if (res.status === 200) {
         setStoredUser(res.data.user);
-        window.localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        Cookies.set("user", JSON.stringify(res.data.user), { expires: 7 });
+
+        success("Connexion réussie !");
       }
     } catch (err) {
       console.error(err);
-      if (err.response.status === 422) {
-        error("Mot de passe incorrect");
+
+      if (err.response) {
+        if (err.response.status === 422) {
+          error("Mot de passe incorrect");
+        } else if (err.response.status === 401) {
+          error("Nom d'utilisateur inexistant");
+        }
+      } else {
+        error("Une erreur s'est produite");
       }
     }
   };
+
   if (storedUser) {
     return <Navigate to="/" />;
   }
+
   return (
     <div className="container">
       <form className="auth" method="POST">
@@ -79,13 +99,10 @@ export default function SignIn({ setSignedUp }) {
       <button
         type="button"
         className="link-button"
-        onClick={() => setSignedUp(false)}
+        onClick={() => navigate("/signup")}
       >
-        créer un compte
+        Créer un compte
       </button>
     </div>
   );
 }
-SignIn.propTypes = {
-  setSignedUp: PropTypes.func.isRequired,
-};
