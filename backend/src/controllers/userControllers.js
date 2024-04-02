@@ -67,7 +67,20 @@ const add = async (req, res, next) => {
 };
 
 // The D of BREAD - Destroy (Delete) operation
-// This operation is not yet implemented
+const destroy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await tables.user.delete(id);
+    if (result.affectedRows === 0) {
+      res.status(404).send("id introuvable");
+    } else {
+      res.status(200).send(`Utilisateur ${id} supprimé`);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 
 // LOGIN
 
@@ -118,7 +131,7 @@ module.exports = {
   read,
   editTheme,
   add,
-  // destroy,
+  destroy,
   login,
   logout,
   refreshToken,

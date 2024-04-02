@@ -41,8 +41,8 @@ export default function Wishlists() {
               }/wishlists/${info.id}/items`
             );
             return itemsResponse.data;
-          } catch (error) {
-            console.error(error);
+          } catch (err) {
+            console.error(err);
             return [];
           }
         });
@@ -52,8 +52,8 @@ export default function Wishlists() {
 
         // Mettre à jour l'état items avec les résultats
         setItems(itemResults);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
       }
     };
 
@@ -109,7 +109,7 @@ export default function Wishlists() {
         prevWishlists.filter((wishlist) => wishlist.id !== wishlistId)
       );
     } catch (err) {
-      console.error(error);
+      console.error(err);
     }
   };
 
@@ -127,7 +127,7 @@ export default function Wishlists() {
             </button>
 
             <div className="wishlists">
-              {wishlists.map((wishlist) => {
+              {wishlists.map((wishlist, index) => {
                 return (
                   <>
                     <div className="list-row" key={wishlist.id}>
@@ -141,8 +141,8 @@ export default function Wishlists() {
                           {items &&
                           Array.isArray(items) &&
                           items.length > 0 &&
-                          Array.isArray(items[0])
-                            ? items[0]
+                          Array.isArray(items[index])
+                            ? items[index]
                                 .slice(-4) // Prend les 4 derniers éléments
                                 .map((item) => (
                                   <div key={item.id} className="img">
@@ -180,6 +180,7 @@ export default function Wishlists() {
                         handleDelete={handleDelete}
                         setValidate={setValidate}
                         wishlist={wishlist}
+                        storedUser={storedUser}
                         key={`validate-${wishlist.id}`}
                       />
                     )}
@@ -193,6 +194,7 @@ export default function Wishlists() {
               setAddNewWishlist={setAddNewWishlist}
               handleSubmit={handleSubmit}
               handleChange={handleChange}
+              storedUser={storedUser}
             />
           )}
         </>

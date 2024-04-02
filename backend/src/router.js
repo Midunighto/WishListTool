@@ -18,6 +18,7 @@ router.get("/users/:id", userControllers.read);
 
 // Route to add a new user
 router.post("/users", signup, hashPassword, userControllers.add);
+router.delete("/users/:id", userControllers.destroy);
 
 router.put("/users/:id/addtheme", userControllers.editTheme);
 

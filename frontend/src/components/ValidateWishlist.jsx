@@ -1,12 +1,15 @@
 import PropTypes from "prop-types";
 
 import close from "../assets/close.svg";
+import closeDark from "../assets/close-darkmode.svg";
+
 import { success } from "../services/toast";
 
 export default function ValidateWishlist({
   setValidate,
   handleDelete,
   wishlist,
+  storedUser,
 }) {
   return (
     <div className="wrapper-modal">
@@ -16,7 +19,11 @@ export default function ValidateWishlist({
           className="close"
           onClick={() => setValidate(false)}
         >
-          <img src={close} alt="" width={25} />
+          <img
+            src={storedUser.theme === 2 ? closeDark : close}
+            alt=""
+            width={25}
+          />
           <p className="hidden"> fermer</p>
         </button>
         <div className="validate-content">

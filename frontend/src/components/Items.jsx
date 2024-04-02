@@ -10,8 +10,9 @@ import { useStoredUser } from "../contexts/UserContext";
 import redirect from "../assets/arrow-right.png";
 import defaut from "../assets/default.svg";
 import edit from "../assets/edit.svg";
-import close from "../assets/close.svg";
 import upload from "../assets/upload.png";
+import close from "../assets/close.svg";
+import closeDark from "../assets/close-darkmode.svg";
 import SignIn from "./SignIn";
 import ValidateItem from "./ValidateItem";
 
@@ -19,6 +20,7 @@ export default function Items({ item, setItems }) {
   const { storedUser } = useStoredUser();
   const [modal, setModal] = useState(false);
   const [validate, setValidate] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [editItem, setEditItem] = useState({
     name: item.name,
@@ -60,6 +62,7 @@ export default function Items({ item, setItems }) {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files.length > 0) {
+      setSelectedImage(URL.createObjectURL(files[0]));
       setEditItem({
         ...editItem,
         [name]: files[0],
@@ -140,7 +143,11 @@ export default function Items({ item, setItems }) {
                   className="close"
                   onClick={() => setModal(false)}
                 >
-                  <img src={close} alt="" width={25} />
+                  <img
+                    src={storedUser.theme === 2 ? closeDark : close}
+                    alt=""
+                    width={25}
+                  />
                   <p className="hidden"> fermer</p>
                 </button>
                 <form action="" className="new-item">
@@ -164,7 +171,7 @@ export default function Items({ item, setItems }) {
                   />
                   <label htmlFor="name">URL</label>
                   <input
-                    type="number"
+                    type="text"
                     name="url"
                     value={editItem.url}
                     required="required"
@@ -181,16 +188,26 @@ export default function Items({ item, setItems }) {
                     inputMode="numeric"
                     placeholder="0"
                   />
-                  <label htmlFor="input-image" className="input-image">
-                    <img src={upload} alt="upload" width={50} />
-                  </label>
-                  <input
-                    type="file"
-                    name="image"
-                    id="input-image"
-                    hidden
-                    onChange={handleChange}
-                  />
+                  <div
+                    className="img-sample"
+                    style={{ display: "flex", gap: "10px" }}
+                  >
+                    <label htmlFor="input-image" className="input-image">
+                      <img src={upload} alt="upload" width={50} />
+                    </label>
+                    <input
+                      type="file"
+                      name="image"
+                      id="input-image"
+                      hidden
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                    />
+                    {selectedImage && (
+                      <img src={selectedImage} alt="" width={50} height={50} />
+                    )}
+                  </div>
                   <button type="button" onClick={handleEdit}>
                     Valider
                   </button>
@@ -199,7 +216,6 @@ export default function Items({ item, setItems }) {
                   type="button"
                   className="delete"
                   onClick={() => {
-                    /*   handleDelete(item.id); */
                     setValidate(true);
                   }}
                 >
@@ -214,6 +230,7 @@ export default function Items({ item, setItems }) {
               handleDelete={handleDelete}
               setValidate={setValidate}
               setModal={setModal}
+              storedUser={storedUser}
             />
           )}
         </>

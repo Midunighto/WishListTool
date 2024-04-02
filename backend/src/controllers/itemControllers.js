@@ -57,7 +57,6 @@ const readByWishlist = async (req, res) => {
   }
 };
 // The E of BREAD - Edit (Update) operation
-// This operation is not yet implemented
 const edit = async (req, res) => {
   try {
     let imagePath;

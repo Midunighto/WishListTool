@@ -11,6 +11,7 @@ import { error } from "../services/toast";
 
 import add from "../assets/add.svg";
 import close from "../assets/close.svg";
+import closeDark from "../assets/close-darkmode.svg";
 import upload from "../assets/upload.png";
 
 export default function Wishlist() {
@@ -22,7 +23,6 @@ export default function Wishlist() {
   const [modal, setModal] = useState(false);
   /* CAL WISHLIST TO GET WISHLIST.NAME */
   useEffect(() => {
-    // Vérifier si storedUser est défini avant de faire l'appel à l'API
     if (storedUser) {
       const loadData = async () => {
         try {
@@ -32,8 +32,8 @@ export default function Wishlist() {
             }/wishlists/${id}/items/`
           );
           setItems(response.data);
-        } catch (error) {
-          console.error(error);
+        } catch (err) {
+          console.error(err);
         }
       };
       loadData();
@@ -51,12 +51,12 @@ export default function Wishlist() {
           }/wishlists/${id}/items/`
         );
         setItems(response.data);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
       }
     };
     loadData();
-  }, [reloadData]);
+  }, [reloadData, storedUser]);
 
   /* ADD ITEM LOGIC */
   const [newItem, setNewItem] = useState({
@@ -156,7 +156,11 @@ export default function Wishlist() {
                   className="close"
                   onClick={() => setModal(false)}
                 >
-                  <img src={close} alt="" width={25} />
+                  <img
+                    src={storedUser.theme === 2 ? closeDark : close}
+                    alt=""
+                    width={25}
+                  />
                   <p className="hidden"> fermer</p>
                 </button>
                 <form action="" className="new-item">

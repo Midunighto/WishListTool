@@ -10,13 +10,11 @@ class UserManager extends AbstractManager {
   // The C of CRUD - Create operation
 
   async create(user) {
-    // Execute the SQL INSERT query to add a new item to the "user" table
     const [result] = await this.database.query(
       `insert into ${this.table} (pseudo, email, pwd) values (?, ?, ?)`,
       [user.pseudo, user.email, user.pwd]
     );
 
-    // Return the ID of the newly inserted user
     return result.insertId;
   }
 
@@ -67,6 +65,14 @@ class UserManager extends AbstractManager {
 
   // The D of CRUD - Delete operation
   // TODO: Implement the delete operation to remove an item by its ID
+  async delete(id) {
+    // Execute the SQL INSERT query to add a new item to the "user" table
+    const [result] = await this.database.query(
+      `delete from ${this.table} where id = ?`,
+      [id]
+    );
+    return result;
+  }
 
   // async delete(id) {
   //   ...

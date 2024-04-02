@@ -4,6 +4,7 @@ import { useStoredUser } from "../contexts/UserContext";
 import "../styles/home.scss";
 
 import logo from "../assets/wantit.png";
+import darklogo from "../assets/logo-darkmode.png";
 
 export default function Home() {
   const { storedUser } = useStoredUser();
@@ -18,7 +19,8 @@ export default function Home() {
           seule liste, simplifiant ainsi votre expérience d'achat en ligne.
           Comparez, partagez et organisez vos envies en un seul endroit.
         </p>
-        <img src={logo} alt="" width={50} />
+
+        <img src={storedUser.theme === 2 ? darklogo : logo} alt="" width={50} />
 
         {storedUser ? (
           <h2>

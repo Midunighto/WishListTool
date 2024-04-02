@@ -8,17 +8,18 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { useStoredUser } from "../contexts/UserContext";
-import { error } from "../services/toast";
+import { error, success } from "../services/toast";
 
 import Home from "./Home";
 
 import "../styles/account.scss";
+import ValidateUser from "../components/ValidateUser";
 
 export default function Account() {
   const { storedUser, setStoredUser } = useStoredUser();
   const [darkTheme, setDarkTheme] = useState(false);
+  const [modal, setModal] = useState(false);
 
-  console.log(storedUser);
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
@@ -76,17 +77,21 @@ export default function Account() {
 
       // Rediriger l'utilisateur vers la page d'accueil après la déconnexion
       window.location.href = "/";
-    } catch (error) {
+    } catch (err) {
       console.error("Error during logout:", error);
     }
   };
 
   const handleChange = () => {
     setDarkTheme(!darkTheme);
-    darkTheme ? (storedUser.theme = 2) : (storedUser.theme = 1);
+    setStoredUser((prevUser) => ({
+      ...prevUser,
+      theme: darkTheme ? 2 : 1,
+    }));
   };
+
   const handleUserTheme = async () => {
-    const updateTheme = { theme: storedUser.theme };
+    const updateTheme = { theme: darkTheme ? 2 : 1 };
     try {
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${
@@ -97,6 +102,25 @@ export default function Account() {
       );
     } catch (err) {
       error(err.response.data.error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${storedUser.id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      handleLogout();
+      success("Votre compte a bien été supprimé");
+    } catch (err) {
+      console.error(
+        "Error during delete:",
+        err.response ? err.response.data : err.message
+      );
+      error("Une erreur est survenue");
     }
   };
 
@@ -114,8 +138,7 @@ export default function Account() {
               </div>
             </div>
             <div className="display">
-              <p disabled>Thème sombre</p>
-              <small>à venir</small>
+              <p>Modifier le thème pour {darkTheme ? "sombre" : "clair"}</p>
               <FormGroup>
                 <FormControlLabel
                   control={
@@ -136,9 +159,18 @@ export default function Account() {
               <button type="button" className="logout" onClick={handleLogout}>
                 Se déconnecter
               </button>
-              <button type="button">supprimer mon compte</button>
+              <button type="button" onClick={() => setModal(true)}>
+                supprimer mon compte
+              </button>
             </div>
           </div>
+          {modal && (
+            <ValidateUser
+              handleDelete={handleDelete}
+              setModal={setModal}
+              storedUser={storedUser}
+            />
+          )}
         </div>
       ) : (
         <Home />

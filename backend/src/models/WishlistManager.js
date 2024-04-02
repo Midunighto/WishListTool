@@ -16,13 +16,10 @@ class WishlistManager extends AbstractManager {
       `insert into ${this.table} (name, user_id) values (?, ?)`,
       [wishlist.name, wishlist.user_id]
     );
-
-    // Return the ID of the newly inserted item
     return result.insertId;
   }
 
   // The Rs of CRUD - Read operations
-
   async readAll() {
     // Execute the SQL SELECT query to retrieve all items from the "item" table
     const [result] = await this.database.query(`select * from ${this.table}`);
@@ -51,8 +48,8 @@ class WishlistManager extends AbstractManager {
     // Return the rows of the result, which represents the wishlists
     return rows;
   }
-  // The D of CRUD - Delete operation
 
+  // The D of CRUD - Delete operation
   async delete(id) {
     const [result] = await this.database.query(
       `delete from ${this.table} where id = ?`,

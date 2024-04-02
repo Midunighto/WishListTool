@@ -43,7 +43,7 @@ body {
     flex-direction: column;
     gap: 1.3rem;
     width: 65%;
-    border: 1px solid $button-color-option2;
+    border: 1px solid transparent;
     border-radius: 25px;
     backdrop-filter: blur(10px);
     box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
@@ -69,4 +69,51 @@ button {
 
 .hidden {
   display: none;
+}
+/* DARK MODE */
+.dark{
+  background-image: url(../assets/background-dark.png);
+  color: $font-color-dark;
+  nav{
+    a{
+      color: $font-color-light !important;
+    }
+    .line{
+      background-color: $font-color-light;
+    
+    }
+  }
+  .container{
+    p, .title, small{
+      color: $font-color-light;
+    }
+    .wishlists{
+      .list-row{
+        border-bottom: 1px solid #575757;
+      
+      }
+    }
+  }
+  
+  h2, button, .wrapper > h1{
+    color: $font-color-light;
+  }
+  .list-container{
+    color: $font-color-dark;
+    h1, h2{
+      color: $font-color-dark;
+    }
+    a{
+      background-color: $button-color-option2 !important;
+    }
+  }
+   button.add-item, button.validate-button{
+    background-color: $button-color-option2 !important;
+    color: $font-color-light;
+  }
+  button.new-wish{
+    background-color: $button-color-light !important;
+    color: $font-color-dark;
+  }
+ 
 }

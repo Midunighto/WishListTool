@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
 
 import close from "../assets/close.svg";
+import closeDark from "../assets/close-darkmode.svg";
 
 export default function AddWishList({
   setAddNewWishlist,
   handleSubmit,
   handleChange,
+  storedUser,
 }) {
   return (
     <div className="wrapper-modal">
@@ -15,7 +17,11 @@ export default function AddWishList({
           className="close"
           onClick={() => setAddNewWishlist(false)}
         >
-          <img src={close} alt="" width={25} />
+          <img
+            src={storedUser.theme === 2 ? closeDark : close}
+            alt=""
+            width={25}
+          />
           <p className="hidden"> fermer</p>
         </button>
         <form action="" className="new-list">

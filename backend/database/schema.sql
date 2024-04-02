@@ -29,3 +29,21 @@ CREATE TABLE `item` (
   FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+ALTER TABLE `item`
+MODIFY COLUMN `price` FLOAT NOT NULL;
+
+ALTER TABLE `wishlist`
+DROP FOREIGN KEY `fk_wishlist_user`;
+
+ALTER TABLE `wishlist`
+ADD CONSTRAINT `fk_wishlist_user`
+FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+
+ALTER TABLE `item`
+DROP FOREIGN KEY `fk_item_user`;
+
+ALTER TABLE `item`
+ADD CONSTRAINT `fk_item_user`
+FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;

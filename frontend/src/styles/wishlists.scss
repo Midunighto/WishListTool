@@ -19,9 +19,11 @@
       gap: 30px;
       .list-row {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        width: 100%;
+        width: 80%;
+        border-bottom: 1px solid rgb(217, 208, 208);
+        padding-bottom: 10px ;
         .delete {
           background-color: transparent;
           border: none;
@@ -33,6 +35,8 @@
           justify-content: center;
           align-items: center;
           gap: 25px;
+          border-radius: 10px;
+          text-decoration: none;
           @media screen and (min-width: 700px) {
             width: 60%;
           }
@@ -45,7 +49,7 @@
             width: 70px;
             min-width: 70px;
             height: 70px;
-            border: 1px solid rgb(130, 130, 130);
+            border: 1px solid rgb(202, 202, 202);
             gap: 3px;
             padding: 2px;
             border-radius: 4%;
@@ -78,14 +82,14 @@
   /* MODAL */
   .wrapper-modal {
     position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 99svw;
     display: flex;
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(8px);
     overflow: hidden !important;
+    top: 0;
     .container-modal {
       height: fit-content;
       display: flex;
@@ -96,6 +100,7 @@
       flex-direction: column;
       gap: 1.3rem;
       width: 60%;
+      max-width: 550px;
       border: 1px solid $button-color-option2;
       border-radius: 25px;
       backdrop-filter: blur(10px);
@@ -134,6 +139,8 @@
           color: white;
         }
       }
+
+     
       /* ADD ITEM MODAL */
       .new-item {
         display: flex;
@@ -151,9 +158,11 @@
         input {
           height: 2rem;
           border-radius: 5px;
-          border: none;
-          margin-bottom: 20px;
-          border: 1px solid rgba(128, 128, 128, 0.2);
+          border: 1px solid transparent;
+          margin-bottom: 15px;
+          padding: 2px;
+          box-shadow: 0px 5px 10px -5px rgba(84, 84, 84, 0.35);
+  
           width: 90%;
         }
         .input-image {
@@ -179,6 +188,10 @@
       color: red;
     }
   }
+  .wishlists .wrapper-modal{
+    align-items: flex-start !important;
+    top: 5rem;
+  }
 }
 /* PAGE WISHLIST */
 
@@ -191,12 +204,13 @@
   .list-container {
     background-color: white;
     height: fit-content;
-    min-height: 60vh;
+    min-height: 80vh;
     width: 65%;
     box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
+    margin-bottom: 3rem;
     justify-content: center;
     @media screen and (min-width: 700px) {
       max-width: 620px;

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import Cookies from "js-cookie";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
@@ -9,7 +10,7 @@ import Navbar from "./components/Navbar";
 import "./styles/root.scss";
 
 function App() {
-  const { setStoredUser } = useStoredUser();
+  const { storedUser, setStoredUser } = useStoredUser();
 
   useEffect(() => {
     axios
@@ -30,9 +31,15 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    storedUser.theme === 2
+      ? document.body.classList.add("dark")
+      : document.body.classList.remove("dark");
+  }, [storedUser.theme]);
+
   return (
     <>
-      <Navbar />
+      <Navbar key={storedUser.theme} />
       <Outlet />
     </>
   );
