@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 import { useStoredUser } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 import "./styles/root.scss";
 
@@ -41,6 +42,7 @@ function App() {
     <>
       <Navbar key={storedUser.theme} />
       <Outlet />
+      <Footer />
     </>
   );
 }

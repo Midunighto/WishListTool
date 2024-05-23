@@ -21,6 +21,7 @@ export default function Wishlist() {
   const [reloadData, setReloadData] = useState(false);
   const { id } = useParams();
   const [modal, setModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   /* CAL WISHLIST TO GET WISHLIST.NAME */
   useEffect(() => {
     if (storedUser) {
@@ -109,15 +110,17 @@ export default function Wishlist() {
 
   const handleChange = (e) => {
     if (e.target.name === "image") {
+      setSelectedImage(URL.createObjectURL(e.target.files[0]));
       setNewItem({
         ...newItem,
         [e.target.name]: e.target.files[0],
       });
-    } else
+    } else {
       setNewItem({
         ...newItem,
         [e.target.name]: e.target.value,
       });
+    }
   };
 
   return (
@@ -197,16 +200,24 @@ export default function Wishlist() {
                     inputMode="numeric"
                     placeholder="0"
                   />
-                  <label htmlFor="input-image" className="input-image">
-                    <img src={upload} alt="upload" width={50} />
-                  </label>
-                  <input
-                    type="file"
-                    name="image"
-                    id="input-image"
-                    hidden
-                    onChange={handleChange}
-                  />
+                  <div
+                    className="img-sample"
+                    style={{ display: "flex", gap: "10px" }}
+                  >
+                    <label htmlFor="input-image" className="input-image">
+                      <img src={upload} alt="upload" width={50} />
+                    </label>
+                    <input
+                      type="file"
+                      name="image"
+                      id="input-image"
+                      hidden
+                      onChange={handleChange}
+                    />
+                    {selectedImage && (
+                      <img src={selectedImage} alt="" width={50} height={50} />
+                    )}
+                  </div>
                   <button
                     type="button"
                     onClick={() => {

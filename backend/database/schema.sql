@@ -1,4 +1,4 @@
--- SQLBook: Code
+/* -- SQLBook: Code
 CREATE TABLE `user`(
   `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL, 
   `pseudo` varchar(50) NOT NULL, 
@@ -17,18 +17,20 @@ CREATE TABLE `wishlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `item` (
-  `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  `name` VARCHAR(50) NOT NULL, 
-  `website` VARCHAR(50) NOT NULL,
-  `url` TEXT NOT NULL,
-  `image` VARCHAR(250),
-  `price` int NOT NULL,
-  `user_id` INT,
-  `wishlist_id` INT,
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `website` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` float NOT NULL,
+  `user_id` int NOT NULL,
+  `wishlist_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_item_wishlist` (`wishlist_id`),
+  KEY `fk_item_user` (`user_id`),
+  CONSTRAINT `fk_item_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_item_wishlist` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `item`
 MODIFY COLUMN `price` FLOAT NOT NULL;
@@ -46,4 +48,4 @@ DROP FOREIGN KEY `fk_item_user`;
 
 ALTER TABLE `item`
 ADD CONSTRAINT `fk_item_user`
-FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE; */

@@ -70,6 +70,16 @@ button {
 .hidden {
   display: none;
 }
+
+footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+ display: flex;
+ justify-content: center;
+ color: $font-color-dark;
+ font-size: 0.7rem;
+}
 /* DARK MODE */
 .dark{
   background-image: url(../assets/background-dark.png);
@@ -115,5 +125,7 @@ button {
     background-color: $button-color-light !important;
     color: $font-color-dark;
   }
- 
+ footer{
+  color: $button-color-light;
+ }
 }
