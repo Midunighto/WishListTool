@@ -14,21 +14,23 @@ function App() {
   const { storedUser, setStoredUser } = useStoredUser();
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/protected`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        const { id, pseudo, theme, email } = res.data;
-        const userData = { id, pseudo, theme, email };
+    if (storedUser) {
+      axios
+        .get(`${import.meta.env.VITE_BACKEND_URL}/api/protected`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          const { id, pseudo, theme, email } = res.data;
+          const userData = { id, pseudo, theme, email };
 
-        setStoredUser(userData);
-      })
-      .catch((err) => {
-        setStoredUser(false);
+          setStoredUser(userData);
+        })
+        .catch((err) => {
+          setStoredUser(false);
 
-        console.error(err);
-      });
+          console.error(err);
+        });
+    }
   }, []);
 
   useEffect(() => {
