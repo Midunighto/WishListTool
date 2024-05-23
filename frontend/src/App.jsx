@@ -23,11 +23,10 @@ function App() {
         const userData = { id, pseudo, theme, email };
 
         setStoredUser(userData);
-        Cookies.set("user", JSON.stringify(userData), { expires: 7 });
       })
       .catch((err) => {
         setStoredUser(false);
-        Cookies.remove("user");
+
         console.error(err);
       });
   }, []);

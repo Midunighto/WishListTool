@@ -85,17 +85,24 @@ const destroy = async (req, res, next) => {
 // LOGIN
 
 const login = async (req, res, next) => {
+  console.log("Login function called");
+  console.log("req.user:", req.user); // Add this line
   try {
     const { user } = req;
 
     const userToken = jwt.sign({ id: user.id }, process.env.APP_SECRET);
-    res.cookie("userToken", userToken, { httpOnly: true });
+    res.cookie("userToken", userToken, {
+      httpOnly: true,
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+      sameSite: "None",
+      secure: true,
+    });
+    console.log("Cookie userToken set:", userToken); // Log to confirm cookie is set
     res.json({ user });
   } catch (err) {
     next(err);
   }
 };
-
 const refreshToken = async (req, res) => {
   const { id } = req.decoded;
   try {
@@ -110,6 +117,8 @@ const refreshToken = async (req, res) => {
     res.cookie("userToken", userToken, {
       httpOnly: true,
       maxAge: 10 * 24 * 60 * 60 * 1000,
+      sameSite: "None",
+      secure: true,
     });
     res.json(result);
   } catch (err) {
