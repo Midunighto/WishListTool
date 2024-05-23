@@ -35,21 +35,16 @@ const router = createBrowserRouter([
         element: <AuthSignIn />,
       },
       {
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: "/my-wishlists",
-            element: <Wishlists />,
-          },
-          {
-            path: "/wishlists/:id",
-            element: <Wishlist />,
-          },
-          {
-            path: "/account",
-            element: <Account />,
-          },
-        ],
+        path: "/my-wishlists",
+        element: <Wishlists />,
+      },
+      {
+        path: "/wishlists/:id",
+        element: <Wishlist />,
+      },
+      {
+        path: "/account",
+        element: <Account />,
       },
     ],
   },
