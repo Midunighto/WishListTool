@@ -54,11 +54,11 @@ export default function Items({ item, setItems }) {
         )
       );
       setModal(false);
+      setSelectedImage(null); // Reset selectedImage after the form is submitted
     } catch (err) {
       console.error(err.response);
     }
   };
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image" && files.length > 0) {

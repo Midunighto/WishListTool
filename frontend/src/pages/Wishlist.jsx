@@ -105,6 +105,7 @@ export default function Wishlist() {
         wishlist_id: id,
       });
       setModal(false);
+      setSelectedImage(null); // Reset selectedImage after the form is submitted
     }
   };
 
