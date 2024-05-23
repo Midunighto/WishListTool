@@ -101,13 +101,13 @@ const refreshToken = async (req, res) => {
   try {
     const result = await tables.user.read(id);
     if (!result) {
-      res.status(404).send("No user found");
+      return res.status(404).send("No user found");
     }
     delete result.password;
-    const userToken = jwt.sign({ user: result }, process.env.APP_SECRET, {
+    const userToken = jwt.sign({ id: result.id }, process.env.APP_SECRET, {
       expiresIn: "10d",
     });
-    res.cookie("token", userToken, {
+    res.cookie("userToken", userToken, {
       httpOnly: true,
       maxAge: 10 * 24 * 60 * 60 * 1000,
     });
@@ -117,14 +117,6 @@ const refreshToken = async (req, res) => {
   }
 };
 
-const logout = async (req, res, next) => {
-  try {
-    res.clearCookie("userToken");
-    res.sendStatus(200);
-  } catch (err) {
-    next(err);
-  }
-};
 // Ready to export the controller functions
 module.exports = {
   browse,
