@@ -104,7 +104,7 @@ const refreshToken = async (req, res) => {
       res.status(404).send("No user found");
     }
     delete result.password;
-    const userToken = jwt.sign({ id }, process.env.APP_SECRET, {
+    const userToken = jwt.sign({ user: result }, process.env.APP_SECRET, {
       expiresIn: "10d",
     });
     res.cookie("token", userToken, {
