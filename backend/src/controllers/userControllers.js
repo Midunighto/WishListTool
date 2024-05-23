@@ -117,6 +117,14 @@ const refreshToken = async (req, res) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("userToken");
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+};
 // Ready to export the controller functions
 module.exports = {
   browse,
